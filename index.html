@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alkhalily Market Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/*
+  VOICE: calm, businesslike Arabic SaaS — decisions first, numbers clean.
+  IDEA: a pricing desk ledger — every product row is a price decision.
+  PICTURE: the comparison tables and price-history charts are the picture.
+  COLOUR/TYPE: white panels on soft gray, orange #F26B1D accent; system Arabic sans.
+  LAYOUT: compact right sidebar (RTL), sticky top bar, card grid, wide tables.
+*/
+:root{
+  --orange:#F26B1D; --orange-600:#D9560C; --orange-50:#FFF5EE; --orange-100:#FFE6D5;
+  --bg:#F4F5F7; --panel:#FFFFFF; --line:#E7E9EE; --line-2:#F0F1F4;
+  --ink:#1D2230; --ink-2:#424A5B; --muted:#6B7385; --faint:#9AA1AF;
+  --green:#15803D; --green-50:#ECFDF3; --red:#C62828; --red-50:#FEF1F1;
+  --amber:#B45309; --amber-50:#FFF7E6; --blue:#1D4ED8; --blue-50:#EEF3FF;
+  --gray-50:#F6F7F9;
+  --radius:12px; --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.04);
+  color-scheme:light;
+}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:14.5px/1.6 "IBM Plex Sans Arabic","Segoe UI","Noto Sans Arabic","Tahoma","Geeza Pro","DejaVu Sans",Arial,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.mono{white-space:nowrap;font-family:ui-monospace,"SFMono-Regular",Consolas,"DejaVu Sans Mono",monospace;font-size:12.5px;letter-spacing:.2px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:12.5px}
+.nowrap{white-space:nowrap}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}
+.sidebar{background:var(--panel);border-inline-start:0;border-inline-end:1px solid var(--line);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;border-bottom:1px solid var(--line-2);margin-bottom:12px}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--orange);display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px;flex:none}
+.brand-name{font-weight:700;font-size:15px;line-height:1.2}
+.brand-sub{font-size:11.5px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:10px 12px;border-radius:9px;cursor:pointer;color:var(--ink-2);font-weight:500;text-align:start;min-height:42px}
+.nav button svg{width:19px;height:19px;flex:none;stroke:currentColor}
+.nav button:hover{background:var(--gray-50)}
+.nav button.active{background:var(--orange-50);color:var(--orange-600);font-weight:700}
+.nav .count{margin-inline-start:auto;background:var(--orange);color:#fff;border-radius:99px;font-size:11px;padding:0 7px;line-height:18px;font-weight:700}
+.side-foot{margin-top:auto;font-size:11.5px;color:var(--muted);padding:10px 8px;border-top:1px solid var(--line-2)}
+.side-foot button{border:0;background:none;color:var(--muted);padding:0;cursor:pointer;text-decoration:underline;font-size:11.5px}
+
+.main{display:flex;flex-direction:column;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 24px;flex-wrap:wrap}
+.topbar h1{font-size:19px;margin:0;font-weight:700}
+.topbar .spacer{flex:1}
+.demo-badge{background:var(--amber-50);color:var(--amber);border:1px solid #F7DDB0;border-radius:99px;font-size:11.5px;padding:2px 10px;font-weight:600;white-space:nowrap}
+.sync-meta{font-size:12px;color:var(--muted);white-space:nowrap}
+.seg{display:inline-flex;background:var(--gray-50);border:1px solid var(--line);border-radius:9px;padding:2px}
+.seg button{border:0;background:none;padding:6px 11px;border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+.content{padding:22px 24px 48px;max-width:1440px;width:100%}
+
+/* ---------- primitives ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:13.5px;min-height:38px;white-space:nowrap;color:var(--ink-2);transition:background .15s,border-color .15s}
+.btn:hover{background:var(--gray-50);border-color:#D9DCE3}
+.btn:focus-visible,.nav button:focus-visible,.chip:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.btn svg{width:16px;height:16px;stroke:currentColor;flex:none}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn.primary:hover{background:var(--orange-600);border-color:var(--orange-600)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--gray-50)}
+.btn.sm{padding:4px 10px;min-height:30px;font-size:12.5px;border-radius:8px}
+.btn.ok{color:var(--green);border-color:#BFE6CC;background:var(--green-50)}
+.btn.no{color:var(--red);border-color:#F4C7C7;background:var(--red-50)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+.card-h h2,.card-h h3{margin:0;font-size:15px;font-weight:700}
+.card-h .sub{font-size:12.5px;color:var(--muted)}
+.card-h .actions{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.card-b{padding:16px 18px}
+.grid{display:grid;gap:16px}
+.g-kpi{grid-template-columns:repeat(5,minmax(0,1fr))}
+.g-2{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)}
+.g-2e{grid-template-columns:repeat(2,minmax(0,1fr))}
+.stack-v>*+*{margin-top:16px}
+.input,.select{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;min-height:38px;font-size:14px;width:100%}
+.input:focus,.select:focus{border-color:var(--orange);outline:none;box-shadow:0 0 0 3px var(--orange-100)}
+.search{position:relative}
+.search svg{position:absolute;inset-inline-start:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--faint)}
+.search .input{padding-inline-start:34px}
+label.f{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.field{margin-bottom:14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.toolbar>.search{flex:1 1 260px}
+.toolbar>.select{width:auto;min-width:150px}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:99px;padding:2px 9px;white-space:nowrap;border:1px solid transparent;line-height:1.6}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.badge.plain::before{display:none}
+.b-green{background:var(--green-50);color:var(--green);border-color:#C8EBD4}
+.b-red{background:var(--red-50);color:var(--red);border-color:#F6CFCF}
+.b-amber{background:var(--amber-50);color:var(--amber);border-color:#F6DFB5}
+.b-blue{background:var(--blue-50);color:var(--blue);border-color:#D3DEFB}
+.b-gray{background:var(--gray-50);color:var(--muted);border-color:var(--line)}
+.b-orange{background:var(--orange-50);color:var(--orange-600);border-color:var(--orange-100)}
+
+/* KPI */
+.kpi{padding:14px 16px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:border-color .15s}
+.kpi:hover{border-color:#D9DCE3}
+.kpi .k-label{font-size:12.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:7px}
+.kpi .k-dot{width:8px;height:8px;border-radius:50%}
+.kpi .k-val{font-size:26px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi .k-foot{font-size:12px;color:var(--muted)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{font-size:12px;color:var(--muted);font-weight:600;text-align:start;padding:10px 12px;background:var(--gray-50);border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover td{background:#FCFCFD}
+.tbl tr.sel td{background:var(--orange-50)}
+.tbl tr.sel:hover td{background:#FFEFE3}
+.tbl tr.excl td{opacity:.55}
+.tbl td.n,.tbl th.n{text-align:end}
+.tbl.compact td,.tbl.compact th{padding:9px 9px}.tbl.compact{font-size:13px}.tbl.compact .p-cell{min-width:150px}
+.tbl .clickable{cursor:pointer}
+.p-cell{display:flex;align-items:center;gap:10px;min-width:170px}
+.p-cell .p-name{font-weight:600;line-height:1.35}
+.p-cell .p-sub{font-size:12px;color:var(--muted)}
+.thumb{width:44px;height:44px;border-radius:11px;flex:none;display:grid;place-items:center;color:var(--tc);background:radial-gradient(120% 120% at 25% 15%,#fff 0,color-mix(in srgb,var(--tc) 10%,#fff) 70%);border:1px solid color-mix(in srgb,var(--tc) 18%,#fff)}
+.thumb svg{width:30px;height:30px}
+.thumb .f{fill:currentColor;fill-opacity:.17}
+.thumb.lg{width:96px;height:96px;border-radius:18px}
+.thumb.lg svg{width:66px;height:66px}
+input[type=checkbox]{width:17px;height:17px;accent-color:var(--orange);cursor:pointer;margin:0;vertical-align:middle}
+.empty{padding:36px 16px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink-2);margin-bottom:4px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font-size:13px;cursor:pointer;min-height:32px;white-space:nowrap;color:var(--ink-2)}
+.chip:hover{border-color:#D3D7DF}
+.chip .c-n{font-size:11.5px;color:var(--faint)}
+.chip.inc{background:var(--orange-50);border-color:var(--orange);color:var(--orange-600);font-weight:600}
+.chip.inc::before{content:"✓";font-weight:800}
+.chip.exc{background:var(--red-50);border-color:#EFB3B3;color:var(--red);text-decoration:line-through}
+.chip.exc::before{content:"−";font-weight:800;text-decoration:none;display:inline-block}
+.chip.filter.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.filter.on .c-n{color:#C9CDD6}
+.chip .x{border:0;background:none;padding:0 0 0 2px;cursor:pointer;color:inherit;font-size:14px;line-height:1}
+.sel-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;align-items:start;padding:8px 0}
+.sel-row+.sel-row{border-top:1px dashed var(--line)}
+.sel-row .lbl{font-size:12.5px;font-weight:700;color:var(--ink-2);padding-top:6px}
+.selbar{position:sticky;bottom:12px;z-index:15;margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ink);color:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 8px 24px rgba(16,24,40,.18)}
+.selbar .big{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.selbar .btn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#fff}
+.selbar .btn:hover{background:rgba(255,255,255,.16)}
+.selbar .btn.primary{background:var(--orange);border-color:var(--orange)}
+.selbar .meta{font-size:12.5px;color:#C9CDD6}
+
+/* lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line-2)}
+.li:last-child{border-bottom:0}
+.li .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none}
+.li .ic svg{width:16px;height:16px}
+.li .t{font-size:13.5px;line-height:1.45}
+.li .m{font-size:12px;color:var(--muted)}
+.li .act{margin-inline-start:auto;display:flex;gap:4px;align-items:center}
+.li.click{cursor:pointer}
+.li.click:hover .t{color:var(--orange-600)}
+.icon-btn{border:0;background:none;color:var(--faint);cursor:pointer;width:28px;height:28px;border-radius:7px;display:grid;place-items:center}
+.icon-btn:hover{background:var(--gray-50);color:var(--ink)}
+
+/* charts */
+.fig{position:relative;direction:ltr}
+.fig svg{display:block;width:100%;height:100%;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--ink-2);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.legend i.dash{background:repeating-linear-gradient(90deg,currentColor 0 4px,transparent 4px 7px)!important}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:7px;white-space:nowrap;transform:translate(-50%,-110%);direction:rtl;z-index:3;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.bar-row{display:grid;grid-template-columns:120px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px;padding:6px 0;cursor:pointer}
+.bar-row:hover .bar-l{color:var(--orange-600)}
+.bar-track{background:var(--gray-50);border-radius:6px;height:12px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px}
+
+/* stat boxes inside detail */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{background:var(--gray-50);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px}
+.stat .s-l{font-size:12px;color:var(--muted);font-weight:600}
+.stat .s-v{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .s-f{font-size:11.5px;color:var(--muted)}
+.stat.hl{background:var(--orange-50);border-color:var(--orange-100)}
+.stat.hl .s-v{color:var(--orange-600)}
+.reco{border:1px solid var(--orange-100);background:linear-gradient(180deg,#FFF8F3,#fff);border-radius:12px;padding:16px}
+.reco h4{margin:0 0 10px;font-size:14.5px}
+.kv{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;font-size:13.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:700;text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{display:flex;gap:9px;align-items:flex-start;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.5}
+.note svg{width:17px;height:17px;flex:none;margin-top:1px}
+.note.warn{background:var(--amber-50);color:#7A3E06;border:1px solid #F6DFB5}
+.note.info{background:var(--blue-50);color:#1E3A8A;border:1px solid #D3DEFB}
+.note.danger{background:var(--red-50);color:#8A1C1C;border:1px solid #F6CFCF}
+.note.lock{background:var(--gray-50);color:var(--ink-2);border:1px solid var(--line)}
+.signals{display:flex;flex-wrap:wrap;gap:4px}
+.tbl .signals{min-width:150px;max-width:210px}
+.sig{font-size:11.5px;border-radius:6px;padding:1px 7px;white-space:nowrap;border:1px solid}
+.sig.y{color:var(--green);background:var(--green-50);border-color:#C8EBD4}
+.sig.n{color:var(--red);background:var(--red-50);border-color:#F6CFCF}
+.sig.u{color:var(--muted);background:var(--gray-50);border-color:var(--line)}
+.score{font-weight:800;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 18px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:12px 12px 10px;cursor:pointer;color:var(--muted);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;min-height:44px}
+.tabs button.on{color:var(--orange-600);border-bottom-color:var(--orange)}
+.tabs .tc{background:var(--gray-50);border-radius:99px;font-size:11px;padding:0 7px;margin-inline-start:5px;color:var(--muted)}
+.tabs button.on .tc{background:var(--orange-100);color:var(--orange-600)}
+.comp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.comp{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.comp .c-top{display:flex;align-items:center;gap:10px}
+.comp .c-av{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+.comp .c-name{font-weight:700}
+.comp .c-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.comp .c-row b{color:var(--ink);font-variant-numeric:tabular-nums}
+.comp.add{border-style:dashed;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);min-height:150px;background:transparent;box-shadow:none}
+.comp.add:hover{border-color:var(--orange);color:var(--orange-600)}
+.cand{border:1px solid var(--line);border-radius:11px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:center}
+.cand+.cand{margin-top:10px}
+.cand.approved{border-color:#BFE6CC;background:#FAFEFB}
+.cand.rejected{opacity:.6;background:var(--gray-50)}
+.cand .c-t{font-weight:600}
+.cand .c-m{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.cand .c-a{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pick-list{border:1px solid var(--line);border-radius:10px;max-height:220px;overflow:auto;margin-top:6px}
+.pick-list button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:#fff;padding:8px 10px;cursor:pointer;text-align:start;border-bottom:1px solid var(--line-2)}
+.pick-list button:hover{background:var(--orange-50)}
+.banner{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #F6DFB5;border-inline-start:4px solid var(--orange);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--ink-2)}
+.banner .icon-btn{margin-inline-start:auto}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(17,22,33,.42);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;animation:fade .15s ease}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:560px;box-shadow:0 20px 50px rgba(16,24,40,.25)}
+.modal.wide{max-width:1040px}
+.modal-h{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line-2)}
+.modal-h h3{margin:0;font-size:16.5px}
+.modal-h .icon-btn{margin-inline-start:auto}
+.modal-b{padding:18px 20px}
+.modal-f{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--line-2);background:#FCFCFD;border-radius:0 0 14px 14px}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:flex;gap:10px;align-items:center;padding:8px 0;color:var(--faint);font-size:13.5px}
+.steps li .st{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none;font-size:12px}
+.steps li.run{color:var(--ink)} .steps li.run .st{border-color:var(--orange);border-top-color:transparent;animation:spin .8s linear infinite}
+.steps li.done{color:var(--ink-2)} .steps li.done .st{background:var(--green);border-color:var(--green);color:#fff}
+.progress{height:6px;background:var(--gray-50);border-radius:99px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;background:var(--orange);width:0;transition:width .3s}
+.spin{width:18px;height:18px;border:2px solid var(--orange-100);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* toast */
+.toasts{position:fixed;top:70px;left:18px;z-index:80;display:flex;flex-direction:column;gap:8px;max-width:360px}
+.toast{background:var(--ink);color:#fff;border-radius:10px;padding:10px 14px;font-size:13.5px;box-shadow:0 8px 24px rgba(16,24,40,.25);animation:fade .2s ease;display:flex;gap:8px;align-items:flex-start}
+.toast.ok{border-inline-start:4px solid #22C55E}
+.toast.err{border-inline-start:4px solid #EF4444}
+.toast.info{border-inline-start:4px solid var(--orange)}
+
+.detail-head{display:flex;gap:16px;align-items:center}
+.detail-head h3{margin:0 0 4px;font-size:18px}
+.meta-line{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.meta-line b{color:var(--ink-2);font-weight:600}
+.sec-title{font-size:14px;font-weight:700;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.whatif{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--orange-100)}
+.whatif .input{width:130px}
+.legend-tiny{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+
+.title-wrap{display:flex;flex-direction:column;gap:1px}
+.page-hint{font-size:12.5px;color:var(--muted)}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.flow-step{display:flex;gap:10px;padding:14px 16px;cursor:pointer;border-inline-start:1px solid var(--line-2);align-items:flex-start;transition:background .15s}
+.flow-step:first-child{border-inline-start:0}
+.flow-step:hover{background:var(--gray-50)}
+.flow-step.todo{background:var(--orange-50)}
+.flow-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none;background:var(--gray-50);color:var(--muted);border:1px solid var(--line)}
+.flow-step.done .flow-n{background:var(--green-50);color:var(--green);border-color:#C8EBD4}
+.flow-step.todo .flow-n{background:var(--orange);color:#fff;border-color:var(--orange)}
+.flow-t{font-weight:700;font-size:13.5px}
+.flow-d{font-size:12px;color:var(--muted);line-height:1.45}
+.flow-next{font-size:12px;color:var(--orange-600);font-weight:700;margin-top:3px}
+.status-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.sc{border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;background:#fff;text-align:start;font:inherit;color:inherit}
+.sc:hover{border-color:#D3D7DF}
+.sc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.sc-top{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13px}
+.sc-n{margin-inline-start:auto;font-size:18px;font-weight:800}
+.sc-d{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.verdict{border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.65;margin-top:16px;border:1px solid}
+.verdict .v-t{display:block;font-size:16px;margin-bottom:2px}
+.guide-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.g-step{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;cursor:pointer}
+.g-step:hover{border-color:var(--orange)}
+.gloss{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;font-size:13.5px;margin:0}
+.gloss dt{font-weight:700;white-space:nowrap}
+.gloss dd{margin:0;color:var(--ink-2)}
+details.how summary{cursor:pointer;font-weight:700;color:var(--ink-2);font-size:13.5px}
+.bar-row{grid-template-columns:150px minmax(0,1fr) 44px}
+@media (max-width:1366px){.app{grid-template-columns:208px minmax(0,1fr)}.content{padding:20px 20px 48px}.topbar{padding:10px 20px}}
+@media (max-width:1280px){.g-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1100px){
+  .app{grid-template-columns:68px minmax(0,1fr)}
+  .sidebar{padding:14px 8px}
+  .brand{justify-content:center;padding:4px 0 14px}
+  .brand-txt,.nav .lbl,.side-foot{display:none}
+  .nav button{justify-content:center;padding:10px}
+  .nav .count{position:absolute;margin:0;transform:translate(-14px,-12px);font-size:10px;padding:0 5px}
+  .nav button{position:relative}
+  .g-2{grid-template-columns:minmax(0,1fr)}
+  .content{padding:18px 16px 40px}
+  .topbar{padding:10px 16px}
+}
+@media (max-width:1100px){.flow{grid-template-columns:repeat(3,minmax(0,1fr))}.flow-step:nth-child(4){border-inline-start:0}.flow-step:nth-child(n+4){border-top:1px solid var(--line-2)}.status-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+  .page-hint{display:none}
+  .flow,.guide-steps{grid-template-columns:minmax(0,1fr)}.flow-step{border-inline-start:0;border-top:1px solid var(--line-2)}
+  .status-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gloss{grid-template-columns:minmax(0,1fr)}
+  .g-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g-2e{grid-template-columns:minmax(0,1fr)}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sel-row{grid-template-columns:minmax(0,1fr)}
+  .sync-meta{display:none}
+  .cand{grid-template-columns:minmax(0,1fr)}
+  .cand .c-a{justify-content:flex-start}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* =================== v3: first impression, tour, map, phone =================== */
+.brand-mark{background:linear-gradient(135deg,#FF8A3D,#E85A0C);box-shadow:0 4px 12px rgba(242,107,29,.28)}
+.brand-mark.lg{width:52px;height:52px;border-radius:15px;font-size:26px}
+.side-foot .sys{display:flex;align-items:center;gap:7px;color:var(--ink-2);font-size:12px;margin-bottom:4px}
+.sys-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.18);flex:none}
+#view.enter{animation:rise .22s ease}
+@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tour-btn{color:var(--orange-600)}
+
+/* hero */
+.hero{overflow:hidden;position:relative;background:linear-gradient(115deg,#FFF5EC 0%,#FFFFFF 58%);border-color:var(--orange-100)}
+.hero::before{content:"";position:absolute;inset-inline-end:-120px;top:-150px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(242,107,29,.10),rgba(242,107,29,0) 70%);pointer-events:none}
+.hero-main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;padding:22px 24px 18px;align-items:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--orange-600);background:#fff;border:1px solid var(--orange-100);border-radius:99px;padding:3px 10px}
+.hero-title{font-size:clamp(22px,2.3vw,30px);line-height:1.3;margin:12px 0 8px;font-weight:800;text-wrap:balance}
+.hero-sub{margin:0 0 16px;color:var(--ink-2);font-size:14.5px;max-width:62ch}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+.hero-viz{display:flex;align-items:center;gap:18px;justify-content:flex-end}
+.donut{width:150px;height:150px;flex:none}
+.hero-legend{display:flex;flex-direction:column;gap:2px;min-width:190px}
+.hl-row{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--ink-2);text-align:start;min-height:34px}
+.hl-row:hover{background:#fff}
+.hl-dot{width:10px;height:10px;border-radius:3px;flex:none}
+.hl-l{flex:1}
+.hl-row b{font-size:15px;color:var(--ink)}
+.hero-steps{border-top:1px solid var(--orange-100);background:rgba(255,255,255,.75);display:flex;align-items:stretch;position:relative}
+.hs-title{display:flex;align-items:center;padding:0 18px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;border-inline-end:1px solid var(--line-2)}
+.flow.compact{flex:1;grid-template-columns:repeat(5,minmax(0,1fr))}
+.flow.compact .flow-step{padding:10px 12px;gap:8px;align-items:center}
+.flow.compact .flow-n{width:24px;height:24px;font-size:12px}
+.flow.compact .flow-t{font-size:12.5px}
+.flow.compact .flow-d{font-size:11.5px}
+
+/* KPI with icon */
+.k-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.k-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+.k-ic svg{width:18px;height:18px}
+.kpi .k-val small{font-size:13px;font-weight:600;color:var(--muted)}
+.kpi .k-val{white-space:nowrap}
+.kpi .k-label{font-size:13px;color:var(--ink);font-weight:700}
+
+/* sticky first column on wide tables */
+.tbl.stick1 tbody td:first-child,.tbl.stick1 thead th:first-child{position:sticky;right:0;z-index:1;background:#fff}
+.tbl.stick1 thead th:first-child{background:var(--gray-50);z-index:2}
+.tbl.stick1 tbody tr:hover td:first-child{background:#FCFCFD}
+
+/* welcome cover */
+.no-scroll{overflow:hidden}
+.cover{position:fixed;inset:0;z-index:70;overflow-y:auto;background:radial-gradient(900px 520px at 100% -10%,#FFE3CF 0%,rgba(255,227,207,0) 60%),radial-gradient(700px 480px at -10% 110%,#FFF0E3 0%,rgba(255,240,227,0) 60%),#fff;animation:fade .25s ease}
+.cover::before{content:"";position:fixed;inset:0;background-image:radial-gradient(rgba(242,107,29,.13) 1px,transparent 1.2px);background-size:22px 22px;mask-image:linear-gradient(180deg,#000,transparent 70%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);pointer-events:none}
+.cv-wrap{position:relative;max-width:1180px;margin:0 auto;min-height:100%;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;align-items:center;padding:40px 32px}
+.cv-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.cv-bn{font-size:20px;font-weight:800;line-height:1.1}
+.cv-bs{font-size:12.5px;color:var(--muted)}
+.cv-pill{display:inline-block;background:var(--amber-50);color:var(--amber);border:1px solid #F7DDB0;border-radius:99px;font-size:12px;font-weight:700;padding:3px 12px}
+.cv-h{font-size:clamp(32px,4vw,50px);line-height:1.2;margin:14px 0 14px;font-weight:800;text-wrap:balance}
+.cv-h span{color:var(--orange)}
+.cv-p{font-size:17px;line-height:1.75;color:var(--ink-2);margin:0 0 22px;max-width:56ch}
+.cv-vals{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:12px}
+.cv-vals li{display:flex;gap:12px;align-items:flex-start}
+.cv-vi{width:36px;height:36px;border-radius:10px;background:var(--orange-50);color:var(--orange-600);display:grid;place-items:center;flex:none;border:1px solid var(--orange-100)}
+.cv-vi svg{width:18px;height:18px}
+.cv-vals b{display:block;font-size:15px}
+.cv-vals span{font-size:13.5px;color:var(--muted)}
+.cv-role{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.cv-cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn.lg{min-height:48px;padding:10px 20px;font-size:15px;border-radius:11px}
+.btn.lg small{font-weight:500;opacity:.85;font-size:12.5px}
+.cv-note{font-size:12px;color:var(--faint);margin-top:14px}
+.cv-visual{position:relative;display:flex;flex-direction:column;gap:14px}
+.cv-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(16,24,40,.10),0 2px 6px rgba(16,24,40,.05);padding:18px}
+.cv-card.op{margin-inline-start:48px;border-color:#D3DEFB}
+.cv-card.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-inline-end:56px;padding:14px 16px;text-align:center}
+.cv-card.mini b{display:block;font-size:22px;font-weight:800}
+.cv-card.mini span{font-size:12px;color:var(--muted)}
+.cv-ch{display:flex;align-items:center;gap:12px}
+.cv-pn{flex:1;display:flex;flex-direction:column;line-height:1.35}
+.cv-pn b{font-size:15px}
+.cv-pn span{font-size:12px;color:var(--muted)}
+.cv-track{position:relative;height:56px;margin:26px 10px 4px;direction:ltr}
+.cv-line{position:absolute;left:0;right:0;top:34px;height:6px;border-radius:6px;background:linear-gradient(90deg,#DCE6FF,#E3F7EA 45%,#FDE2E2)}
+.cv-dot{position:absolute;top:31px;width:12px;height:12px;border-radius:50%;background:#1D2230;border:2px solid #fff;transform:translateX(-50%);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.cv-avg{position:absolute;top:24px;width:2px;height:26px;background:#1D2230;opacity:.45;transform:translateX(-50%)}
+.cv-our{position:absolute;top:27px;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid #fff;transform:translateX(-50%);box-shadow:0 2px 8px rgba(242,107,29,.5)}
+.cv-our em{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-style:normal;font-size:12px;font-weight:700;padding:2px 8px;border-radius:7px;white-space:nowrap;direction:rtl}
+.cv-scale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);direction:ltr;text-align:center;margin-top:6px}
+.cv-scale span{direction:rtl}
+.cv-scale b{color:var(--ink);font-size:13px}
+.cv-verdict{display:flex;align-items:center;gap:8px;margin-top:14px;background:var(--red-50);color:var(--red);border-radius:10px;padding:9px 12px;font-weight:700;font-size:13.5px}
+.cv-gain{margin-top:12px;background:var(--blue-50);color:var(--blue);border-radius:10px;padding:9px 12px;font-size:13.5px;font-weight:600}
+.cv-gain b{font-size:18px}
+
+/* guide: how the production system works */
+.prod-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pf-node{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:13px;background:#fff}
+.pf-node span{width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+
+/* guided tour */
+.tour-block{position:fixed;inset:0;z-index:90}
+.tour-block.dim{background:rgba(15,20,30,.55)}
+.tour-spot{position:fixed;z-index:91;border-radius:14px;box-shadow:0 0 0 3px var(--orange),0 0 0 9999px rgba(15,20,30,.55);pointer-events:none;transition:left .25s ease,top .25s ease,width .25s ease,height .25s ease}
+.tour-card{position:fixed;z-index:92;width:min(370px,calc(100vw - 24px));background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);padding:18px 18px 14px;animation:fade .2s ease}
+.tour-card.final{width:min(520px,calc(100vw - 24px));padding:24px}
+.tour-card h4{margin:2px 0 6px;font-size:17px;padding-inline-end:28px}
+.tour-card p{margin:0;color:var(--ink-2);font-size:14px;line-height:1.75}
+.t-step{font-size:12px;font-weight:700;color:var(--orange-600)}
+.t-x{position:absolute;top:10px;inset-inline-end:10px}
+.t-foot{display:flex;align-items:center;gap:8px;margin-top:14px}
+.t-dots{display:flex;gap:5px;margin-inline-end:auto}
+.t-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.t-dots i.done{background:var(--orange-100)}
+.t-dots i.on{background:var(--orange);width:18px;border-radius:5px}
+.t-flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:14px}
+.t-node{background:var(--orange-50);border:1px solid var(--orange-100);color:var(--orange-600);border-radius:8px;padding:4px 9px;font-size:12.5px;font-weight:600}
+.t-arr{color:var(--faint)}
+
+@media (max-width:1100px){
+  .hero-steps{flex-direction:column}
+  .hs-title{padding:10px 16px 0;border:0}
+  .flow.compact{grid-template-columns:repeat(5,minmax(150px,1fr));overflow-x:auto}
+  .flow.compact .flow-step:nth-child(n+4){border-top:0}
+  .flow.compact .flow-step:nth-child(4){border-inline-start:1px solid var(--line-2)}
+}
+@media (max-width:980px){
+  .cv-wrap{grid-template-columns:minmax(0,1fr);gap:28px;padding:28px 20px}
+  .cv-card.op,.cv-card.mini{margin-inline:0}
+  .hero-main{grid-template-columns:minmax(0,1fr)}
+  .hero-viz{justify-content:flex-start}
+}
+@media (max-width:760px){
+  .flow.compact{grid-template-columns:repeat(5,minmax(150px,1fr))}
+  .flow.compact .flow-step{border-top:0}
+  .prod-flow{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .sidebar{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:40;flex-direction:row;padding:4px 4px calc(4px + env(safe-area-inset-bottom));border:0;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(16,24,40,.06)}
+  .brand,.side-foot{display:none}
+  .nav{flex-direction:row;width:100%;gap:0}
+  .nav button{flex:1;flex-direction:column;gap:2px;padding:6px 2px;font-size:10.5px;min-height:54px;justify-content:center;position:relative}
+  .nav .lbl{display:block!important;white-space:nowrap}
+  .nav .count{position:absolute;top:3px;left:50%;margin:0;transform:translateX(-18px);font-size:10px;padding:0 5px}
+  .main{padding-bottom:70px}
+  .topbar{padding:8px 12px;gap:8px}
+  .topbar h1{font-size:17px}
+  .topbar .btn span,.sync-meta,.page-hint{display:none}
+  .topbar .tour-btn span{display:inline}
+  .topbar .tour-btn{padding:8px 8px}
+  .topbar .btn{padding:8px 10px;min-height:36px}
+  .topbar .seg button{padding:6px 8px;font-size:12px}
+  .content{padding:14px 12px 96px}
+  .overlay{padding:0}
+  .modal,.modal.wide{border-radius:0;min-height:100%}
+  .modal-f{border-radius:0}
+  .selbar{bottom:74px}
+  .toasts{top:auto;bottom:82px;left:12px;right:12px;max-width:none}
+  .hero-main{padding:18px 16px 14px}
+  .hero-viz{flex-direction:column;align-items:stretch}
+  .donut{align-self:center}
+  .cv-h{font-size:32px}
+  .cv-p{font-size:15.5px}
+  .cv-cta .btn{flex:1 1 100%}
+  .tbl .p-cell{min-width:150px}
+  .tbl.compact .p-cell{min-width:140px}
+  .detail-head{flex-direction:column;align-items:flex-start}
+}
+
+.decide{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+
+</style>
+</head>
+<body>
+<div id="nojs" style="max-width:560px;margin:60px auto;padding:28px;border:1px solid #FFE6D5;border-radius:16px;background:#FFF8F3;font:16px/1.8 Tahoma,Arial,sans-serif;color:#1D2230;text-align:center">
+  <div style="width:52px;height:52px;border-radius:14px;background:#F26B1D;color:#fff;font-size:26px;font-weight:700;line-height:52px;margin:0 auto 14px">خ</div>
+  <b style="font-size:20px">Alkhalily Market Intelligence</b><br>
+  هذه نسخة عرض تفاعلية وتحتاج فتحها في متصفح.<br>
+  افتح الملف من الكمبيوتر في Chrome أو Edge أو Safari، أو استخدم رابط العرض.
+</div>
+<div class="app">
+  <aside class="sidebar" aria-label="القائمة الرئيسية">
+    <div class="brand"><div class="brand-mark">خ</div><div class="brand-txt"><div class="brand-name">الخليلي</div><div class="brand-sub">Market Intelligence</div></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <button data-act="guide">دليل الاستخدام</button> · <button data-act="reset">إعادة ضبط البيانات</button>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content" id="view"></main>
+  </div>
+</div>
+<div id="modal-root"></div>
+<div id="cover-root"></div>
+<div id="tour-root"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script>
+{
+// ---- util.js ----
+// ===================== util.js =====================
+// Small helpers shared by every module. No dependencies.
+const DAY = 864e5, HOUR = 36e5;
+const delay = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n, d = 0) => n == null || isNaN(n) ? '—' : Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const egp = n => n == null || isNaN(n) ? '—' : `<span class="num">${fmt(n)} ج.م</span>`;
+const egpTxt = n => n == null || isNaN(n) ? '—' : `${fmt(n)} ج.م`;
+const pct = (n, d = 1) => n == null || isNaN(n) ? '—' : `<span class="num ltr">${n > 0 ? '+' : ''}${fmt(n, d)}%</span>`;
+const pctPlain = (n, d = 1) => n == null || isNaN(n) ? '—' : `<span class="num">${fmt(n, d)}%</span>`;
+// Arabic number–noun agreement: cnt(1,'product') → "منتج واحد", 2 → "منتجين", 5 → "5 منتجات", 24 → "24 منتجًا"
+const NOUNS = {
+  product: ['منتج واحد', 'منتجين', 'منتجات', 'منتجًا'],
+  price: ['سعر واحد', 'سعرين', 'أسعار', 'سعرًا'],
+  link: ['رابط واحد', 'رابطين', 'روابط', 'رابطًا'],
+  competitor: ['منافس واحد', 'منافسَين', 'منافسين', 'منافسًا'],
+  change: ['تغيير واحد', 'تغييرين', 'تغييرات', 'تغييرًا'],
+  sheet: ['ورقة واحدة', 'ورقتين', 'أوراق', 'ورقة'],
+  result: ['نتيجة واحدة', 'نتيجتين', 'نتائج', 'نتيجة'],
+  opp: ['فرصة واحدة', 'فرصتين', 'فرص', 'فرصة'],
+  competitorPl: ['منافس واحد', 'منافسَين', 'منافسين', 'منافسًا'],
+};
+const cnt = (n, k) => {
+  const f = NOUNS[k]; n = Math.round(n);
+  if (n === 1) return f[0];
+  if (n === 2) return f[1];
+  const r = n % 100; // Arabic agreement follows the last two digits
+  return `${fmt(n)} ${n === 0 || (r >= 3 && r <= 10) ? f[2] : r >= 11 ? f[3] : f[3].replace(/ًا$/, '')}`;
+};
+// percentage wrapped in bidi isolates so it reads correctly inside Arabic plain text
+const isoPct = (n, d = 1) => '\u2066' + fmt(n, d) + '%\u2069';
+const sum = a => a.reduce((s, x) => s + x, 0);
+const avg = a => a.length ? sum(a) / a.length : null;
+const median = a => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const uid = (p = 'id') => p + '_' + Math.random().toString(36).slice(2, 9);
+function hashStr(s) { let h = 2166136261; for (const ch of String(s)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = typeof seed === 'number' ? seed : hashStr(seed); return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const round5 = x => Math.round(x / 5) * 5;
+const ceil5 = x => Math.ceil(x / 5) * 5;
+
+function fmtDate(d) { if (!d) return '—'; d = new Date(d); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; }
+function fmtDateTime(d) { if (!d) return '—'; d = new Date(d); return `${fmtDate(d)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; }
+function relTime(d) {
+  if (!d) return 'لم يتم بعد';
+  const diff = Date.now() - new Date(d).getTime();
+  if (diff < 60e3) return 'الآن';
+  const ar = (n, one, two, few, many) => n === 1 ? one : n === 2 ? two : n <= 10 ? `${n} ${few}` : `${n} ${many}`;
+  const m = Math.round(diff / 60e3); if (m < 60) return 'منذ ' + ar(m, 'دقيقة', 'دقيقتين', 'دقائق', 'دقيقة');
+  const h = Math.round(diff / HOUR); if (h < 24) return 'منذ ' + ar(h, 'ساعة', 'ساعتين', 'ساعات', 'ساعة');
+  const dd = Math.round(diff / DAY); return 'منذ ' + ar(dd, 'يوم', 'يومين', 'أيام', 'يومًا');
+}
+const normalize = s => String(s || '').toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\s\-_/]+/g, '');
+
+// Inline icon set (stroke icons, 24x24)
+const ICONS = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  box: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+  store: '<path d="M4 9h16l-1.5-5h-13z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  file: '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  sync: '<path d="M20 11a8 8 0 0 0-14.9-3M4 4v4h4M4 13a8 8 0 0 0 14.9 3M20 20v-4h-4"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  check: '<path d="m5 12 5 5 9-10"/>',
+  alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  down: '<path d="M12 4v12M6 10l6 6 6-6M4 20h16"/>',
+  play: '<path d="M7 4v16l13-8z"/>',
+  save: '<path d="M5 3h11l3 3v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><path d="M8 3v5h7M8 21v-7h8v7"/>',
+  trendDown: '<path d="m3 7 6 6 4-4 8 8"/><path d="M21 11v6h-6"/>',
+  trendUp: '<path d="m3 17 6-6 4 4 8-8"/><path d="M21 13V7h-6"/>',
+  tag: '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>',
+};
+const ic = (name, extra = '') => `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" ${extra}>${ICONS[name] || ''}</svg>`;
+
+// ---- mock-data.js ----
+// ===================== mock-data.js =====================
+// DEMO DATA ONLY — fictional prices, competitors and listings.
+// Nothing here is actual Alkhalily store data. In production this whole file
+// is replaced by responses from the .NET API (which reads the Store API + PostgreSQL).
+
+const CATEGORIES = [
+  { id: 'power', name: 'عدد كهربائية', color: '#F26B1D', icon: 'drill' },
+  { id: 'hand', name: 'عدد يدوية', color: '#2563EB', icon: 'wrench' },
+  { id: 'garden', name: 'معدات حدائق', color: '#16A34A', icon: 'leaf' },
+  { id: 'measure', name: 'أدوات قياس', color: '#7C3AED', icon: 'ruler' },
+  { id: 'acc', name: 'ملحقات وإكسسوارات', color: '#0891B2', icon: 'bit' },
+  { id: 'safety', name: 'مستلزمات السلامة', color: '#CA8A04', icon: 'shield' },
+];
+const CAT = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
+const BRANDS = ['TOTAL', 'INGCO', 'Bosch', 'Makita', 'Stanley', 'DeWalt', 'Crown'];
+
+// Product images: see product-art.js (drawn per product type)
+
+// [name, model, brand, cat, price, cost, stock, qty, scenario, specs, package]
+// scenario only drives demo price generation: above | opp | comp | needs
+const RAW_PRODUCTS = [
+  ['شنيور دقاق 13 مم 750 وات', 'TG1071356', 'TOTAL', 'power', 1450, 1080, 'in', 34, 'above', '750 وات · 0–2800 لفة/د · ظرف 13 مم', 'شنيور + مقبض جانبي + مسطرة عمق'],
+  ['صاروخ تجليخ 4.5 بوصة 900 وات', 'TG10911536', 'TOTAL', 'power', 1250, 960, 'in', 52, 'comp', '900 وات · قرص 115 مم · 11000 لفة/د', 'صاروخ + مقبض + غطاء حماية'],
+  ['مفك شحن ليثيوم 20 فولت', 'TIDLI20021', 'TOTAL', 'power', 2850, 2150, 'low', 6, 'opp', '20V · عزم 45 نيوتن.م · بطارية 2 أمبير', 'مفك + بطارية + شاحن + شنطة'],
+  ['منشار أركت 650 وات', 'TS2081006', 'TOTAL', 'power', 1690, 1290, 'in', 18, 'above', '650 وات · عمق قطع 65 مم خشب', 'منشار + 2 سلاح + مفتاح ألن'],
+  ['طقم مفكات 42 قطعة', 'THT250PS4201', 'TOTAL', 'hand', 520, 380, 'in', 75, 'comp', 'سن CR-V · مقبض مطاطي', '42 قطعة في علبة'],
+  ['شنطة عدة 108 قطعة', 'THKTHP21086', 'TOTAL', 'hand', 2150, 1760, 'in', 11, 'opp', 'لقم 1/4 و 1/2 بوصة · مفاتيح ربط', '108 قطعة في شنطة بلاستيك'],
+  ['متر شريط 5 م', 'TMT126051', 'TOTAL', 'measure', 95, 62, 'in', 240, 'comp', '5 م × 19 مم · جسم ABS', 'متر واحد'],
+  ['ميزان مياه ليزر خطين', 'TLL156506', 'TOTAL', 'measure', 1890, 1420, 'in', 9, 'opp', 'مدى 15 م · دقة ±0.3 مم/م', 'جهاز + حامل + بطاريات'],
+  ['ماكينة غسيل ضغط عالي 1400 وات', 'TGT11316', 'TOTAL', 'garden', 3950, 3180, 'low', 4, 'above', '1400 وات · ضغط 90 بار', 'ماكينة + خرطوم 5 م + مسدس'],
+  ['نظارة حماية شفافة', 'TSP304', 'TOTAL', 'safety', 65, 38, 'in', 310, 'needs', 'عدسة بولي كربونات', 'نظارة واحدة'],
+  ['قفازات عمل جلد', 'TSP13106', 'TOTAL', 'safety', 55, 30, 'in', 420, 'needs', 'جلد مقاس XL', 'زوج واحد'],
+  ['خرطوم حديقة 20 م', 'THPH2001', 'TOTAL', 'garden', 450, 330, 'in', 60, 'comp', '1/2 بوصة · 3 طبقات', 'خرطوم + وصلات'],
+  ['صاروخ تجليخ 4.5 بوصة 750 وات', 'AG750282', 'INGCO', 'power', 1050, 820, 'in', 40, 'comp', '750 وات · قرص 115 مم', 'صاروخ + مقبض'],
+  ['شنيور 10 مم 450 وات', 'ED4508', 'INGCO', 'power', 690, 540, 'in', 27, 'opp', '450 وات · ظرف 10 مم', 'شنيور فقط'],
+  ['طقم لقم بنط 15 قطعة', 'AKDB1155', 'INGCO', 'acc', 210, 145, 'in', 130, 'above', 'خشب/حديد/خرسانة', '15 قطعة في علبة'],
+  ['مقص تقليم أشجار', 'HPS0109', 'INGCO', 'garden', 180, 118, 'out', 0, 'comp', 'شفرة SK5 · 8 بوصة', 'مقص واحد'],
+  ['خوذة سلامة', 'HSH201', 'INGCO', 'safety', 120, 70, 'in', 85, 'needs', 'ABS · قابلة للضبط', 'خوذة واحدة'],
+  ['شنيور دقاق 13 مم 600 وات', 'GSB 13 RE', 'Bosch', 'power', 2650, 2050, 'in', 14, 'above', '600 وات · 0–2800 لفة/د', 'شنيور + مقبض + مسطرة عمق'],
+  ['صاروخ تجليخ 115 مم 750 وات', 'GWS 750-115', 'Bosch', 'power', 2390, 1880, 'in', 22, 'comp', '750 وات · 11000 لفة/د', 'صاروخ + مقبض + غطاء حماية'],
+  ['جهاز قياس مسافة ليزر 40 م', 'GLM 40', 'Bosch', 'measure', 3350, 2620, 'low', 3, 'opp', 'مدى 40 م · دقة ±1.5 مم', 'جهاز + بطاريات + جراب'],
+  ['مفك صدمات شحن 18 فولت (بدون بطارية)', 'DTD155Z', 'Makita', 'power', 5200, 4150, 'in', 7, 'comp', '18V · عزم 140 نيوتن.م · بدون فحمات', 'جسم الجهاز فقط'],
+  ['صاروخ تجليخ 115 مم 840 وات', '9558HN', 'Makita', 'power', 2950, 2280, 'in', 16, 'needs', '840 وات · 11000 لفة/د', 'صاروخ + مقبض + مفتاح'],
+  ['طقم مفاتيح بلدي 12 قطعة', 'STMT33650', 'Stanley', 'hand', 890, 640, 'in', 33, 'comp', 'كروم فاناديوم · 8–19 مم', '12 مفتاح في حافظة'],
+  ['متر شريط 8 م', 'STHT33994', 'Stanley', 'measure', 240, 165, 'in', 98, 'above', '8 م × 25 مم', 'متر واحد'],
+  ['شنيور دقاق 13 مم 650 وات', 'DWD024', 'DeWalt', 'power', 2750, 2240, 'in', 12, 'above', '650 وات · 0–2800 لفة/د', 'شنيور + مقبض جانبي'],
+  ['منشار ترددي شحن 18 فولت (بدون بطارية)', 'DCS367N', 'DeWalt', 'power', 8900, 7350, 'low', 2, 'above', '18V · شوط 28 مم · بدون فحمات', 'جسم الجهاز فقط'],
+  ['صاروخ تجليخ 115 مم 860 وات', 'CT13497', 'Crown', 'power', 1180, 860, 'in', 29, 'opp', '860 وات · 12000 لفة/د', 'صاروخ + مقبض'],
+];
+// Products that "appear" on the first manual Store Sync (simulates new items in the store)
+const RAW_SYNC_POOL = [
+  ['منفاخ هواء كهربائي 600 وات', 'TB2066', 'TOTAL', 'power', 990, 760, 'in', 20, 'new', '600 وات · سرعة متغيرة', 'منفاخ + كيس غبار'],
+  ['زرادية عزل 8 بوصة', '0-84-111', 'Stanley', 'hand', 260, 175, 'in', 45, 'new', 'عزل 1000 فولت', 'زرادية واحدة'],
+];
+const CAT_CODE = { power: 'PT', hand: 'HT', garden: 'GD', measure: 'MS', acc: 'AC', safety: 'SF' };
+function buildProduct(r, i) {
+  const [name, model, brand, cat, price, cost, stock, qty, sc, specs, pkg] = r;
+  return { id: 'p' + (i + 1), sku: `ALK-${CAT_CODE[cat]}-${1001 + i}`, name, model, brand, cat, price, cost, stock, qty, sc, specs, pkg };
+}
+
+const COMPETITOR_SEED = [
+  { id: 'c1', name: 'عالم العدد', website: 'https://tools-world.example', color: '#0F766E' },
+  { id: 'c2', name: 'بيت المعدات', website: 'https://beit-almoadat.example', color: '#7C3AED' },
+  { id: 'c3', name: 'مارت الصنايعي', website: 'https://sanaye-mart.example', color: '#BE185D' },
+  { id: 'c4', name: 'عدد مصر أونلاين', website: 'https://adad-misr.example', color: '#1D4ED8' },
+];
+
+// Build all mock records relative to "now" so dates always look fresh.
+function buildMockDb() {
+  const now = Date.now();
+  const products = RAW_PRODUCTS.map(buildProduct);
+  const competitors = COMPETITOR_SEED.map(c => ({ ...c, addedAt: now - 120 * DAY, lastMonitor: now - (2 + hashStr(c.id) % 5) * HOUR }));
+  const matches = [];
+  const ourHistory = {};
+  const W = 8;
+
+  const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const mkHistory = (r, final, inStock, last, forceDrop) => {
+    const start = round5(final * (1 + (r() - 0.45) * 0.10));
+    const pts = [];
+    for (let w = 0; w < W; w++) {
+      const t = last - (W - 1 - w) * 7 * DAY;
+      let p;
+      if (w === W - 1) p = final;
+      else if (w === W - 2) p = forceDrop ? round5(final * 1.06) : (r() < 0.25 ? round5(final * (1 + (r() - 0.5) * 0.10)) : final);
+      else p = round5(start + (final - start) * (w / (W - 1)) + (r() - 0.5) * final * 0.02);
+      pts.push({ t, price: p, inStock: w === W - 1 ? inStock : true });
+    }
+    return pts;
+  };
+  const sigAll = { model: 'y', sku: 'u', brand: 'y', specs: 'y', pkg: 'y' };
+
+  products.forEach((p, i) => {
+    const r = rng('prod-' + p.id);
+    // Alkhalily's own price history (some products were reduced 4 weeks ago)
+    ourHistory[p.id] = Array.from({ length: W }, (_, w) => ({ t: now - (W - 1 - w) * 7 * DAY, price: (i % 6 === 2 && w < 4) ? round5(p.price * 1.06) : p.price }));
+
+    const f = { above: 0.87 + r() * 0.05, opp: 1.09 + r() * 0.06, comp: 0.992 + r() * 0.022, needs: 1 + (r() - 0.5) * 0.06 }[p.sc];
+    let comps = COMPETITOR_SEED.map(c => c.id);
+    if (p.sc !== 'needs' && r() < 0.4) comps.splice(Math.floor(r() * 4), 1);
+
+    const add = (cid, opts = {}) => {
+      const cmp = COMPETITOR_SEED.find(c => c.id === cid);
+      const price = opts.price ?? round5(p.price * f * (1 + (r() - 0.5) * 0.07));
+      const last = opts.last ?? (now - (1 + r() * 26) * HOUR);
+      const inStock = opts.inStock ?? true;
+      const m = {
+        id: 'm' + (matches.length + 1), productId: p.id, compId: cid,
+        title: opts.title ?? `${p.brand} ${p.name} ${p.model}`,
+        url: `${cmp.website}/products/${slug(p.brand + '-' + p.model)}${opts.urlSuffix || ''}`,
+        price, inStock, status: opts.status ?? 'approved', lastChecked: last,
+        parseError: !!opts.parseError,
+        signals: opts.signals ?? sigAll, score: opts.score ?? (92 + Math.floor(r() * 7)),
+        createdAt: now - 60 * DAY, history: [],
+      };
+      m.history = opts.status === 'pending' ? [{ t: last, price, inStock }] : mkHistory(r, price ?? p.price, inStock, last, opts.forceDrop);
+      if (m.parseError) { m.price = null; m.history[m.history.length - 1].price = null; }
+      matches.push(m);
+      return m;
+    };
+
+    if (p.sc === 'needs') {
+      if (p.cat === 'safety' && i % 2 === 0) {
+        // no matches at all
+      } else if (p.cat === 'safety') {
+        add('c2', { status: 'pending', score: 71, signals: { model: 'n', sku: 'u', brand: 'y', specs: 'y', pkg: 'y' }, title: `${p.brand} ${p.name}` });
+      } else {
+        add('c1');
+        add('c3', { inStock: false });
+        add('c4', { status: 'pending', score: 78, signals: { model: 'y', sku: 'u', brand: 'y', specs: 'y', pkg: 'n' }, title: `${p.brand} ${p.name} ${p.model} + شنطة وأقراص`, urlSuffix: '-kit' });
+      }
+      return;
+    }
+    comps.forEach((cid, k) => {
+      const o = {};
+      if (k === 0 && p.sc === 'above') o.forceDrop = true;
+      if (k === 1 && i % 5 === 1) o.inStock = false;
+      if (k === 2 && i % 7 === 3) o.last = now - 12 * DAY;              // stale observation
+      if (k === 2 && i % 9 === 4) { o.price = round5(p.price * 0.42); o.title = `${p.brand} ${p.model} — قطعة غيار`; }   // outlier
+      if (k === 0 && i % 8 === 6) o.parseError = true, o.price = null;  // scraper could not read the price
+      add(cid, o);
+    });
+    // a pending (unconfirmed) listing for some products
+    const missing = COMPETITOR_SEED.map(c => c.id).filter(c => !comps.includes(c));
+    if (i % 3 === 0 && missing.length) {
+      add(missing[0], { status: 'pending', score: 64 + Math.floor(r() * 20), price: round5(p.price * (0.85 + r() * 0.1)), signals: { model: r() < .5 ? 'y' : 'n', sku: 'u', brand: 'y', specs: r() < .6 ? 'y' : 'n', pkg: 'n' }, title: `${p.brand} ${p.name} (موديل ${p.model}-K مع ملحقات)`, urlSuffix: '-k' });
+    }
+  });
+
+  // initial feed of recent market updates derived from the generated history
+  const updates = [];
+  matches.filter(m => m.status === 'approved').forEach(m => {
+    const h = m.history, a = h[h.length - 2], b = h[h.length - 1];
+    const p = products.find(x => x.id === m.productId), c = competitors.find(x => x.id === m.compId);
+    if (a && b && a.price && b.price && a.price !== b.price) updates.push({ id: uid('u'), t: b.t, type: b.price < a.price ? 'down' : 'up', productId: p.id, text: `${c.name} ${b.price < a.price ? 'خفّض' : 'رفع'} سعر ${p.name} من ${egpTxt(a.price)} إلى ${egpTxt(b.price)}` });
+    if (a && b && a.inStock && !b.inStock) updates.push({ id: uid('u'), t: b.t, type: 'stock', productId: p.id, text: `نفد مخزون ${p.name} لدى ${c.name}` });
+  });
+  updates.sort((x, y) => y.t - x.t);
+
+  const analyzed = new Set(products.filter(p => matches.some(m => m.productId === p.id && m.status === 'approved')).map(p => p.id));
+  return {
+    products, competitors, matches, ourHistory, updates: updates.slice(0, 14),
+    syncPool: RAW_SYNC_POOL.map((r, k) => buildProduct(r, RAW_PRODUCTS.length + k)),
+    analyzed, lastSync: now - 26 * HOUR, lastAnalysis: now - 3 * HOUR, syncCount: 0,
+  };
+}
+
+// ---- product-art.js ----
+// ===================== product-art.js =====================
+// Duotone product illustrations (48×48). ".f" = tinted fill + outline, plain = outline only.
+const ART = {
+  drill: '<path class="f" d="M7 13.5A3.5 3.5 0 0 1 10.5 10h17a3.5 3.5 0 0 1 3.5 3.5v6a3.5 3.5 0 0 1-3.5 3.5h-17A3.5 3.5 0 0 1 7 19.5z"/><path class="f" d="M31 12.5h4.5l2 2v4l-2 2H31z"/><path d="M37.5 16.5H45M11 14.5v4M14 14.5v4"/><path class="f" d="M14.5 23h8l-2 11h-8.2z"/><path class="f" d="M8.5 34h16a1.5 1.5 0 0 1 1.5 1.5V40a1.5 1.5 0 0 1-1.5 1.5h-16A1.5 1.5 0 0 1 7 40v-4.5A1.5 1.5 0 0 1 8.5 34z"/>',
+  driver: '<path class="f" d="M7 13.5A3.5 3.5 0 0 1 10.5 10h14a3.5 3.5 0 0 1 3.5 3.5v6a3.5 3.5 0 0 1-3.5 3.5h-14A3.5 3.5 0 0 1 7 19.5z"/><path class="f" d="M28 13h5v7h-5z"/><path d="M33 16.5h8M41 14.5v4M11 14.5v4M14 14.5v4"/><path class="f" d="M14.5 23h8l-2 11h-8.2z"/><path class="f" d="M8.5 34h16a1.5 1.5 0 0 1 1.5 1.5V40a1.5 1.5 0 0 1-1.5 1.5h-16A1.5 1.5 0 0 1 7 40v-4.5A1.5 1.5 0 0 1 8.5 34z"/><path d="M17 36l-2 3h3l-2 3"/>',
+  grinder: '<circle class="f" cx="37" cy="33" r="9"/><circle cx="37" cy="33" r="2"/><path class="f" d="M4 20.5A4.5 4.5 0 0 1 8.5 16H27a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4H8.5A4.5 4.5 0 0 1 4 21.5z"/><path class="f" d="M31 15h6v12h-6z"/><path class="f" d="M32 3.5h4V11h-4z"/><path d="M34 11v4M9 19v4M12 19v4M15 19v4"/>',
+  jigsaw: '<path d="M10 22v-8a6 6 0 0 1 6-6h14a6 6 0 0 1 6 6v8M16 22v-6h14v6"/><path class="f" d="M8 22h30v6a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z"/><path d="M6 33h34M24 30v13M24 35l2 1.2-2 1.2M24 39.5l2 1.2-2 1.2"/>',
+  recip: '<path class="f" d="M4 19.5A4.5 4.5 0 0 1 8.5 15H30l4 3v6l-4 3H8.5A4.5 4.5 0 0 1 4 22.5z"/><path d="M8 27v6a3 3 0 0 0 3 3h6l3-9M34 21h11M36 21l1 2 1-2 1 2 1-2 1 2 1-2 1 2M10 19v4M13 19v4"/>',
+  screwdrivers: '<g transform="rotate(45 24 24)"><path class="f" d="M19.5 31a4.5 4.5 0 0 1 9 0v10a4.5 4.5 0 0 1-9 0z"/><path d="M24 31V8M22.5 8h3"/></g><g transform="rotate(-45 24 24)"><path class="f" d="M19.5 31a4.5 4.5 0 0 1 9 0v10a4.5 4.5 0 0 1-9 0z"/><path d="M24 31V9M24 9l-1.5-1.5M24 9l1.5-1.5"/></g>',
+  toolbox: '<path class="f" d="M5 19a3 3 0 0 1 3-3h32a3 3 0 0 1 3 3v19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/><path d="M5 25h38M17 16v-4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"/><path class="f" d="M21 22.5h6v5.5h-6z"/>',
+  bits: '<path class="f" d="M12.5 36V17l1.5-4 1.5 4v19zM22.5 36V12l1.5-5 1.5 5v24zM32.5 36V19l1.5-3.5 1.5 3.5v17z"/><path d="M12.5 21l3 1.8M12.5 26l3 1.8M12.5 31l3 1.8M22.5 16l3 1.8M22.5 21l3 1.8M22.5 26l3 1.8M22.5 31l3 1.8M32.5 23l3 1.8M32.5 28l3 1.8"/><path class="f" d="M7 36h34v5a1.5 1.5 0 0 1-1.5 1.5h-31A1.5 1.5 0 0 1 7 41z"/>',
+  wrench: '<g transform="rotate(45 24 24)"><path class="f" d="M17 9.5a7 7 0 0 1 14 0v1a4.5 4.5 0 0 1-4 4.5V33h-6V15a4.5 4.5 0 0 1-4-4.5z"/><path d="M21.5 2.8v6.7h5V2.8"/><circle class="f" cx="24" cy="38.5" r="6.5"/><circle cx="24" cy="38.5" r="2.6"/></g>',
+  tape: '<path class="f" d="M6 14a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><circle cx="20" cy="24" r="6.5"/><circle cx="20" cy="24" r="1.6"/><path class="f" d="M34 31h10v5H34z"/><path d="M44 31v8M37.5 31v2.2M40.5 31v2.2"/>',
+  laser: '<path d="M24 22L7 6M24 22L41 6M3 13.5h42" stroke-dasharray="2.5 3"/><path class="f" d="M15 25a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H18a3 3 0 0 1-3-3z"/><path d="M19 27h10v6H19zM21 38h6"/>',
+  distance: '<path d="M24 6V1" stroke-dasharray="2 2"/><path class="f" d="M15 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4z"/><path d="M19 11h10v9H19zM20 35h8"/><circle cx="24" cy="27.5" r="3"/>',
+  washer: '<path d="M12 9V4h14v5"/><path class="f" d="M9 12a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v22H9z"/><path d="M9 34h20M13 15h12M29 26c8 0 10 4 10 9"/><circle class="f" cx="14" cy="38.5" r="5"/><circle cx="14" cy="38.5" r="1.5"/><path class="f" d="M34.5 35h9v4h-9z"/>',
+  hose: '<circle cx="21" cy="24" r="15"/><circle cx="21" cy="24" r="10"/><circle class="f" cx="21" cy="24" r="5"/><path class="f" d="M35.5 21.5h7v5h-7z"/><path d="M42.5 22.8h3v2.4h-3"/>',
+  pruner: '<path class="f" d="M24 24c-1.2-7 1.8-15 10-18-.8 7-3.8 13-8 18z"/><path class="f" d="M24 24c-5-3-11-4-15.5-2.2C11.5 25 17 26.5 22.5 27z"/><circle cx="24" cy="24.5" r="2.2"/><path d="M23 27.5l-6 15M25 27.5l6 15" stroke-width="4.2"/>',
+  blower: '<path class="f" d="M6 16a8 8 0 0 1 8-8h10a8 8 0 0 1 8 8v4a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8z"/><path class="f" d="M32 15h12v6H32z"/><path class="f" d="M13 28l-2 11h7.5l2-11z"/><path d="M12 14v8M16 14v8"/>',
+  glasses: '<path class="f" d="M5 20h15v8a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5zM28 20h15v8a5 5 0 0 1-5 5h-5a5 5 0 0 1-5-5z"/><path d="M5 20h38M20 23a4 4 0 0 1 8 0M5 20l-2-4.5M43 20l2-4.5"/>',
+  gloves: '<path class="f" d="M15 44V28l-4.5-6.5a2.8 2.8 0 0 1 4.6-3.2L18 22V9.5a2.5 2.5 0 0 1 5 0V19V7.5a2.5 2.5 0 0 1 5 0V19V9.5a2.5 2.5 0 0 1 5 0V20v-6.5a2.5 2.5 0 0 1 5 0V28c0 7-3 11-6 13v3z"/><path d="M15 38h20"/>',
+  helmet: '<path class="f" d="M8 33a16 16 0 0 1 32 0z"/><path class="f" d="M4 33h40v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M21 17.5V33M27 17.5V33"/>',
+  pliers: '<path class="f" d="M21 20l1.6-14a1.4 1.4 0 0 1 2.8 0L27 20z"/><path d="M24 7.5V20"/><path class="f" d="M22 25l-7.5 17a2.2 2.2 0 0 0 4 1.8L24 28zM26 25l7.5 17a2.2 2.2 0 0 1-4 1.8L24 28z"/><circle class="f" cx="24" cy="22.5" r="3"/>',
+  leaf: '<path class="f" d="M10 38C10 20 22 10 40 8c0 18-11 30-30 30z"/><path d="M10 38l18-18"/>',
+  shield: '<path class="f" d="M24 6l15 6v11c0 10-6.5 16-15 19-8.5-3-15-9-15-19V12z"/><path d="M18 24l4.5 4.5L31 20"/>',
+};
+const ART_RULES = [['شنيور', 'drill'], ['صاروخ', 'grinder'], ['منشار أركت', 'jigsaw'], ['منشار ترددي', 'recip'], ['مفك شحن', 'driver'], ['مفك صدمات', 'driver'], ['طقم مفكات', 'screwdrivers'], ['شنطة عدة', 'toolbox'], ['طقم لقم', 'bits'], ['طقم مفاتيح', 'wrench'], ['متر شريط', 'tape'], ['ميزان', 'laser'], ['قياس مسافة', 'distance'], ['ماكينة غسيل', 'washer'], ['خرطوم', 'hose'], ['مقص', 'pruner'], ['منفاخ', 'blower'], ['نظارة', 'glasses'], ['قفازات', 'gloves'], ['خوذة', 'helmet'], ['زرادية', 'pliers']];
+const CAT_ART = { power: 'drill', hand: 'wrench', garden: 'leaf', measure: 'tape', acc: 'bits', safety: 'shield' };
+const artFor = p => (ART_RULES.find(([k]) => p.name.includes(k)) || [0, CAT_ART[p.cat]])[1];
+function productImage(p, size = '') {
+  const c = CAT[p.cat];
+  return `<div class="thumb ${size}" style="--tc:${c.color}" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">${ART[artFor(p)]}</svg></div>`;
+}
+
+// ---- pricing.js ----
+// ===================== pricing.js =====================
+// Deterministic pricing intelligence. Pure functions — fixed formulas, no randomness.
+// The same rules are meant to live in the .NET backend; the UI only displays results.
+const STATUS = {
+  competitive: { label: 'سعر تنافسي', cls: 'b-green', desc: 'سعرنا قريب من متوسط المنافسين — لا يحتاج تغييرًا', color: '#15803D' },
+  above: { label: 'أعلى من السوق', cls: 'b-red', desc: 'سعرنا أغلى من متوسط المنافسين — يحتاج مراجعة', color: '#C62828' },
+  opportunity: { label: 'فرصة لزيادة الربح', cls: 'b-blue', desc: 'سعرنا أرخص من المتوسط بوضوح — يمكن رفعه', color: '#1D4ED8' },
+  needs: { label: 'بيانات غير كافية', cls: 'b-amber', desc: 'لا توجد أسعار منافسين كافية للحكم', color: '#B45309' },
+};
+const statusBadge = s => `<span class="badge ${STATUS[s].cls}">${STATUS[s].label}</span>`;
+
+const Pricing = {
+  profit: (price, cost) => price - cost,
+  margin: (price, cost) => price > 0 ? (price - cost) / price * 100 : 0,
+  /** Minimum Safe Price = Cost / (1 - Target Margin) */
+  minSafe: (cost, targetPct) => cost / (1 - targetPct / 100),
+
+  /** Classify one competitor observation. Only "ok" observations are used as market references. */
+  assess(m, settings, now = Date.now()) {
+    if (m.status === 'pending') return { ok: false, code: 'unconfirmed', reason: 'رابط لم يتم تأكيده' };
+    if (m.status === 'rejected') return { ok: false, code: 'rejected', reason: 'رابط مرفوض' };
+    if (m.parseError || m.price == null || !(m.price > 0)) return { ok: false, code: 'missing', reason: 'السعر غير متاح' };
+    if (!m.inStock) return { ok: false, code: 'oos', reason: 'غير متوفر عند المنافس' };
+    if (now - m.lastChecked > settings.staleDays * DAY) return { ok: false, code: 'stale', reason: `آخر تحديث أقدم من ${settings.staleDays} أيام` };
+    return { ok: true, code: 'ok', reason: 'صالح للمقارنة' };
+  },
+
+  analyze(product, allMatches, settings) {
+    const now = Date.now();
+    const ms = allMatches.filter(m => m.productId === product.id && m.status !== 'rejected');
+    const rows = ms.map(m => ({ m, ...Pricing.assess(m, settings, now) }));
+    // outlier filter: a price far from the median of the other usable prices is unreliable
+    let usable = rows.filter(r => r.ok);
+    if (usable.length >= 3) {
+      const med = median(usable.map(r => r.m.price));
+      usable.forEach(r => { if (r.m.price < med * 0.6 || r.m.price > med * 1.6) Object.assign(r, { ok: false, code: 'outlier', reason: 'سعر غير منطقي مقارنة بالباقي' }); });
+      usable = rows.filter(r => r.ok);
+    }
+    const prices = usable.map(r => r.m.price);
+    const n = prices.length;
+    const approved = ms.filter(m => m.status === 'approved');
+    const res = {
+      product, rows, n,
+      approvedCount: approved.length,
+      pendingCount: ms.filter(m => m.status === 'pending').length,
+      inStockCount: approved.filter(m => m.inStock).length,
+      excluded: rows.filter(r => !r.ok).length,
+      lastChecked: approved.length ? Math.max(...approved.map(m => m.lastChecked)) : null,
+      min: n ? Math.min(...prices) : null, max: n ? Math.max(...prices) : null, avg: n ? avg(prices) : null,
+      minSafe: Pricing.minSafe(product.cost, settings.targetMargin),
+      profitNow: Pricing.profit(product.price, product.cost),
+      marginNow: Pricing.margin(product.price, product.cost),
+      warnings: [],
+    };
+    res.diffPct = n ? (product.price - res.avg) / res.avg * 100 : null;
+    if (res.marginNow < settings.targetMargin) res.warnings.push({ kind: 'warn', text: `هامش الربح الحالي (${isoPct(res.marginNow)}) أقل من الهامش المستهدف (${isoPct(settings.targetMargin, 0)}).`, sensitive: true });
+
+    if (n < settings.minObservations) {
+      res.status = 'needs';
+      res.suggested = null;
+      res.warnings.unshift({ kind: 'danger', text: `لا توجد أسعار منافسين كافية: الصالح للمقارنة ${n} من أصل ${rows.length}، والمطلوب ${settings.minObservations} على الأقل، لذلك لا يتم اقتراح سعر.` });
+    } else {
+      res.status = res.diffPct > settings.tolerance ? 'above' : res.diffPct < -settings.opportunityGap ? 'opportunity' : 'competitive';
+      let s, basis;
+      if (res.status === 'competitive') { s = product.price; basis = 'السعر الحالي مناسب للسوق'; }
+      else {
+        // Market reference: slightly under the competitors' average, never below the cheapest reliable competitor.
+        s = round5(Math.max(res.avg * (1 - settings.undercut / 100), res.min));
+        basis = `${100 - settings.undercut}% من متوسط المنافسين`;
+      }
+      res.floorHit = s < res.minSafe;
+      if (res.floorHit) { s = ceil5(res.minSafe); basis = 'الحد الأدنى الآمن (مقرّبًا لأقرب 5 ج.م)'; }
+      res.cannotCompete = res.minSafe > res.max;
+      res.suggested = s; res.basis = basis;
+      if (res.cannotCompete) res.warnings.unshift({ kind: 'danger', text: `حتى أغلى منافس (${egpTxt(res.max)}) أرخص من الحد الأدنى الآمن لسعرنا (${egpTxt(res.minSafe)}). تخفيض السعر لمجاراة السوق سيكسر هامش الربح — الأفضل مراجعة سعر الشراء مع المورد.`, sensitive: true });
+      else if (res.floorHit) res.warnings.push({ kind: 'warn', text: 'السعر المقترح توقف عند الحد الأدنى الآمن حتى لا ينزل هامش الربح عن المستهدف.', sensitive: true });
+      if (n === settings.minObservations) res.warnings.push({ kind: 'info', text: `النتيجة مبنية على ${cnt(n, 'price')} فقط — إضافة منافسين آخرين تجعلها أدق.` });
+    }
+    if (res.excluded) res.warnings.push({ kind: 'info', text: `تم تجاهل ${cnt(res.excluded, 'price')} في الحساب (رابط غير مؤكد، أو غير متوفر، أو قديم، أو سعر غير منطقي) — السبب موضح في الجدول.` });
+    if (res.suggested != null) {
+      res.profitSuggested = Pricing.profit(res.suggested, product.cost);
+      res.marginSuggested = Pricing.margin(res.suggested, product.cost);
+      res.deltaUnit = res.suggested - product.price;
+    }
+    return res;
+  },
+};
+
+// ---- xlsx.js ----
+// ===================== xlsx.js =====================
+// Minimal, dependency-free .xlsx writer (stored ZIP + SpreadsheetML), RTL sheets.
+const Xlsx = (() => {
+  const enc = new TextEncoder();
+  const crcTable = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = crcTable[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  const x = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+  const col = i => { let s = ''; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+
+  function zip(files) {
+    const parts = [], central = []; let offset = 0;
+    const d = new Date(), dosTime = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), dosDate = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    for (const f of files) {
+      const name = enc.encode(f.name), data = typeof f.data === 'string' ? enc.encode(f.data) : f.data, crc = crc32(data);
+      const h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dosTime, true); h.setUint16(12, dosDate, true); h.setUint32(14, crc, true);
+      h.setUint32(18, data.length, true); h.setUint32(22, data.length, true); h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(new Uint8Array(h.buffer), name, data);
+      const c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true);
+      c.setUint16(12, dosTime, true); c.setUint16(14, dosDate, true); c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, data.length, true);
+      c.setUint16(28, name.length, true); c.setUint32(42, offset, true);
+      central.push(new Uint8Array(c.buffer), name);
+      offset += 30 + name.length + data.length;
+    }
+    const cdSize = central.reduce((s, p) => s + p.length, 0);
+    const e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, cdSize, true); e.setUint32(16, offset, true);
+    const all = [...parts, ...central, new Uint8Array(e.buffer)];
+    const out = new Uint8Array(all.reduce((s, p) => s + p.length, 0)); let o = 0; for (const p of all) { out.set(p, o); o += p.length; }
+    return out;
+  }
+
+  function sheetXml(rows, widths) {
+    const cols = widths && widths.length ? `<cols>${widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('')}</cols>` : '';
+    const body = rows.map((r, ri) => `<row r="${ri + 1}">${r.map((v, ci) => {
+      const ref = col(ci) + (ri + 1);
+      if (v == null || v === '') return '';
+      if (typeof v === 'number' && isFinite(v)) return `<c r="${ref}"${Number.isInteger(v) ? ' s="2"' : ' s="3"'}><v>${v}</v></c>`;
+      return `<c r="${ref}" t="inlineStr"${ri === 0 ? ' s="1"' : ''}><is><t xml:space="preserve">${x(v)}</t></is></c>`;
+    }).join('')}</row>`).join('');
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetViews><sheetView rightToLeft="1" workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>${cols}<sheetData>${body}</sheetData></worksheet>`;
+  }
+
+  /** sheets: [{ name, rows: [[header...], [values...]], widths: [..] }] → Uint8Array (.xlsx) */
+  function build(sheets) {
+    const safe = s => s.replace(/[\[\]:*?/\\]/g, ' ').slice(0, 31);
+    const files = [
+      { name: '[Content_Types].xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>` },
+      { name: '_rels/.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>` },
+      { name: 'xl/workbook.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s, i) => `<sheet name="${x(safe(s.name))}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>` },
+      { name: 'xl/_rels/workbook.xml.rels', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>` },
+      { name: 'xl/styles.xml', data: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="#,##0"/><numFmt numFmtId="165" formatCode="#,##0.0"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF26B1D"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="4"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>` },
+      ...sheets.map((s, i) => ({ name: `xl/worksheets/sheet${i + 1}.xml`, data: sheetXml(s.rows, s.widths) })),
+    ];
+    return zip(files);
+  }
+  return { build, crc32 };
+})();
+
+// Save a generated file as a normal browser download.
+// A hosting page may register its own saver with FileSaver.setHost({ save }) — optional.
+const FileSaver = (() => {
+  let host = null;
+  async function save(filename, bytes) {
+    if (host) {
+      try { await host.save({ filename, data: bytes }); return 'saved'; }
+      catch (e) { if (e && e.code === 'declined') return 'declined'; throw e; }
+    }
+    const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    return 'saved';
+  }
+  return { save, setHost: h => { host = h; } };
+})();
+
+// ---- api.js ----
+// ===================== api.js =====================
+// Mock API layer. Every UI action goes through these functions only.
+// To go live, replace each body with a fetch() to the ASP.NET Core API, e.g.
+//   syncStore: () => fetch('/api/store/sync', { method: 'POST' }).then(r => r.json())
+// The UI never touches mock data directly except through `db` reads returned here.
+const db = buildMockDb();
+
+const api = {
+  /** POST /api/store/sync — read-only import from the Alkhalily Store API into the system DB */
+  async syncStore() {
+    await delay(500);
+    const added = [];
+    if (db.syncPool.length) { added.push(...db.syncPool.splice(0)); db.products.push(...added); }
+    // simulate a few stock / price updates coming from the store
+    const r = rng('sync-' + db.syncCount);
+    const stockChanged = [];
+    db.products.forEach(p => {
+      if (r() < 0.08) { const old = p.stock; p.qty = old === 'out' ? 15 : Math.max(0, Math.round(p.qty * (0.3 + r() * 0.5))); p.stock = p.qty === 0 ? 'out' : p.qty < 8 ? 'low' : 'in'; if (p.stock !== old) stockChanged.push(p); }
+    });
+    db.syncCount++;
+    db.lastSync = Date.now();
+    added.forEach(p => db.ourHistory[p.id] = [{ t: Date.now(), price: p.price }]);
+    db.updates.unshift({ id: uid('u'), t: Date.now(), type: 'sync', text: `مزامنة المتجر: ${cnt(db.products.length, 'product')}${added.length ? ` · الجديد: ${added.length}` : ''} · تحديثات المخزون: ${stockChanged.length}` });
+    return { total: db.products.length, added, stockChanged, at: db.lastSync };
+  },
+
+  /** POST /api/competitors */
+  async addCompetitor({ name, website }) {
+    await delay(250);
+    const colors = ['#0E7490', '#9333EA', '#B91C1C', '#4D7C0F', '#A16207'];
+    const c = { id: uid('c'), name, website, color: colors[db.competitors.length % colors.length], addedAt: Date.now(), lastMonitor: null };
+    db.competitors.push(c);
+    db.updates.unshift({ id: uid('u'), t: Date.now(), type: 'comp', text: `تمت إضافة المنافس ${name}` });
+    return c;
+  },
+
+  /** POST /api/competitors/preview — scraper reads a single URL (simulated) */
+  async previewUrl(url, productId) {
+    await delay(700);
+    const p = db.products.find(x => x.id === productId);
+    const r = rng(url + productId);
+    return { title: p ? `${p.brand} ${p.name} ${p.model}` : 'منتج', price: p ? round5(p.price * (0.9 + r() * 0.18)) : null, inStock: r() > 0.15 };
+  },
+
+  /** POST /api/matches — manual link: always created as PENDING (needs human approval) */
+  async addCompetitorUrl({ compId, productId, url, price, inStock, title }) {
+    await delay(250);
+    const p = db.products.find(x => x.id === productId);
+    const m = { id: uid('m'), productId, compId, title: title || `${p.brand} ${p.name}`, url, price: price ?? null, inStock: inStock ?? true, status: 'pending', lastChecked: Date.now(), parseError: price == null, signals: { model: 'u', sku: 'u', brand: 'u', specs: 'u', pkg: 'u' }, score: null, createdAt: Date.now(), manual: true, history: [{ t: Date.now(), price: price ?? null, inStock: inStock ?? true }] };
+    db.matches.push(m);
+    return m;
+  },
+
+  /** PATCH /api/matches/:id { status } */
+  async setMatchStatus(id, status) {
+    await delay(150);
+    const m = db.matches.find(x => x.id === id); if (!m) throw new Error('not found');
+    m.status = status; m.reviewedAt = Date.now();
+    if (status === 'approved') {
+      if (m.history.length < 2 && m.price) { // seed a short history so charts are not empty
+        m.history = [{ t: Date.now() - 7 * DAY, price: m.price, inStock: m.inStock }, ...m.history];
+      }
+      const p = db.products.find(x => x.id === m.productId), c = db.competitors.find(x => x.id === m.compId);
+      db.updates.unshift({ id: uid('u'), t: Date.now(), type: 'match', productId: p.id, text: `تم تأكيد رابط ${p.name} عند ${c.name}` });
+    }
+    return m;
+  },
+
+  /** POST /api/discovery — search competitor stores for possible matches (simulated) */
+  async discover(productId) {
+    await delay(900);
+    const p = db.products.find(x => x.id === productId);
+    const r = rng('disc-' + productId);
+    const out = [];
+    const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    db.competitors.forEach(c => {
+      const existing = db.matches.find(m => m.productId === p.id && m.compId === c.id && !m.url.endsWith('-k') && !m.url.endsWith('-kit'));
+      const base = round5(p.price * (0.9 + r() * 0.16));
+      // 1) strong candidate (same model + brand)
+      out.push({ key: c.id + '-exact', compId: c.id, existingId: existing?.id, title: `${p.brand} ${p.name} ${p.model}`, url: `${c.website}/products/${slug(p.brand + '-' + p.model)}`, price: existing?.price ?? base, inStock: existing ? existing.inStock : r() > 0.15, signals: { model: 'y', sku: 'u', brand: 'y', specs: 'y', pkg: 'y' }, score: 90 + Math.floor(r() * 9) });
+      // 2) look-alike with different package contents
+      if (r() < 0.55) out.push({ key: c.id + '-kit', compId: c.id, title: `${p.brand} ${p.name} ${p.model}-K + شنطة وملحقات`, url: `${c.website}/products/${slug(p.brand + '-' + p.model)}-kit`, price: round5(p.price * (1.08 + r() * 0.1)), inStock: true, signals: { model: 'n', sku: 'u', brand: 'y', specs: 'y', pkg: 'n' }, score: 55 + Math.floor(r() * 15) });
+      // 3) other brand, similar specs
+      if (r() < 0.35) { const ob = BRANDS.filter(b => b !== p.brand)[Math.floor(r() * 6)]; out.push({ key: c.id + '-alt', compId: c.id, title: `${ob} ${p.name}`, url: `${c.website}/products/${slug(ob)}-${Math.floor(r() * 9000 + 1000)}`, price: round5(p.price * (0.7 + r() * 0.2)), inStock: true, signals: { model: 'n', sku: 'u', brand: 'n', specs: 'y', pkg: 'u' }, score: 25 + Math.floor(r() * 15) }); }
+    });
+    out.sort((a, b) => b.score - a.score);
+    return out;
+  },
+
+  /** Approve or reject a discovery candidate (creates the match record) */
+  async reviewCandidate(productId, cand, status) {
+    await delay(50);
+    let m = cand.existingId ? db.matches.find(x => x.id === cand.existingId) : null;
+    if (!m) {
+      m = { id: uid('m'), productId, compId: cand.compId, title: cand.title, url: cand.url, price: cand.price, inStock: cand.inStock, status: 'pending', lastChecked: Date.now(), parseError: false, signals: cand.signals, score: cand.score, createdAt: Date.now(), history: [{ t: Date.now(), price: cand.price, inStock: cand.inStock }] };
+      db.matches.push(m);
+      cand.existingId = m.id;
+    }
+    return api.setMatchStatus(m.id, status);
+  },
+
+  /** POST /api/analysis/run — n8n would normally refresh approved URLs in the background */
+  async runAnalysis(productIds, onStep) {
+    const steps = 4;
+    for (let s = 0; s < steps; s++) { onStep && onStep(s); await delay(520); }
+    const now = Date.now();
+    const r = rng('run-' + now);
+    const changes = [];
+    const ids = new Set(productIds);
+    db.matches.filter(m => ids.has(m.productId) && m.status === 'approved').forEach(m => {
+      const prev = m.price;
+      if (m.parseError && r() < 0.5) { m.parseError = false; m.price = round5((db.products.find(p => p.id === m.productId).price) * (0.95 + r() * 0.08)); }
+      else if (m.price && r() < 0.18) { m.price = round5(m.price * (1 + (r() < 0.6 ? -1 : 1) * (0.02 + r() * 0.05))); }
+      if (r() < 0.04) m.inStock = !m.inStock;
+      m.lastChecked = now;
+      m.history.push({ t: now, price: m.price, inStock: m.inStock });
+      if (prev && m.price && prev !== m.price) {
+        const p = db.products.find(x => x.id === m.productId), c = db.competitors.find(x => x.id === m.compId);
+        changes.push({ m, prev });
+        db.updates.unshift({ id: uid('u'), t: now, type: m.price < prev ? 'down' : 'up', productId: p.id, text: `${c.name} ${m.price < prev ? 'خفّض' : 'رفع'} سعر ${p.name} من ${egpTxt(prev)} إلى ${egpTxt(m.price)}` });
+      }
+    });
+    const touched = new Set(db.matches.filter(m => ids.has(m.productId) && m.status === 'approved').map(m => m.compId));
+    db.competitors.forEach(c => { if (touched.has(c.id)) c.lastMonitor = now; });
+    productIds.forEach(id => db.analyzed.add(id));
+    db.lastAnalysis = now;
+    db.updates.unshift({ id: uid('u'), t: now, type: 'analysis', text: `تحليل السوق: ${cnt(productIds.length, 'product')} · ${cnt(changes.length, 'change')} في أسعار المنافسين` });
+    return { analyzed: productIds.length, changes };
+  },
+};
+
+// ---- charts.js ----
+// ===================== charts.js =====================
+// Tiny SVG line chart drawn at real pixel size (ResizeObserver) with a hover tooltip.
+const Charts = (() => {
+  const registry = new Map();
+  let ro = null;
+  function niceTicks(min, max, n = 4) {
+    const span = max - min || Math.abs(max) || 1, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
+    const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => s >= step0) || mag * 10;
+    const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step, out = [];
+    for (let v = lo; v <= hi + step / 2; v += step) out.push(+v.toFixed(6));
+    return out;
+  }
+  function draw(el) {
+    const cfg = registry.get(el.dataset.chart); if (!cfg) return;
+    if (cfg.type === 'posmap') return drawPosmap(el, cfg);
+    const svg = el.querySelector('svg'); const W = el.clientWidth, H = el.clientHeight; if (!W || !H) return;
+    const small = W < 520;
+    const pts = cfg.series.flatMap(s => s.points.filter(p => p.y != null));
+    if (!pts.length) { svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" fill="#9AA1AF" font-size="13">لا توجد بيانات كافية للرسم</text>`; return; }
+    const pad = { l: small ? 44 : 58, r: 14, t: 12, b: 28 };
+    let t0 = Math.min(...pts.map(p => p.t)), t1 = Math.max(...pts.map(p => p.t)); if (t0 === t1) { t0 -= DAY; t1 += DAY; }
+    let y0 = Math.min(...pts.map(p => p.y)), y1 = Math.max(...pts.map(p => p.y));
+    const yp = (y1 - y0) * 0.12 || y1 * 0.05 || 1; y0 -= yp; y1 += yp;
+    const ticks = niceTicks(y0, y1, small ? 3 : 4); y0 = Math.min(y0, ticks[0]); y1 = Math.max(y1, ticks[ticks.length - 1]);
+    const X = t => pad.l + (t - t0) / (t1 - t0) * (W - pad.l - pad.r);
+    const Y = y => pad.t + (1 - (y - y0) / (y1 - y0)) * (H - pad.t - pad.b);
+    const yfmt = cfg.yFormat || (v => fmt(v));
+    let g = '';
+    ticks.forEach(v => { if (v < y0 - 1e-9 || v > y1 + 1e-9) return; g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#EEF0F3"/><text x="${pad.l - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#9AA1AF">${esc(yfmt(v))}</text>`; });
+    const xs = [...new Set(pts.map(p => p.t))].sort((a, b) => a - b);
+    const every = Math.max(1, Math.ceil(xs.length / (small ? 4 : 8)));
+    xs.forEach((t, i) => { if (i % every && i !== xs.length - 1) return; const d = new Date(t); g += `<text x="${X(t)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="#9AA1AF">${d.getDate()}/${d.getMonth() + 1}</text>`; });
+    if (cfg.refLine != null && cfg.refLine >= y0 && cfg.refLine <= y1) g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${Y(cfg.refLine)}" y2="${Y(cfg.refLine)}" stroke="#C62828" stroke-dasharray="3 4" opacity=".6"/><text x="${W - pad.r}" y="${Y(cfg.refLine) - 5}" text-anchor="end" font-size="11" fill="#C62828" paint-order="stroke" stroke="#fff" stroke-width="4">${esc(cfg.refLabel || '')}</text>`;
+    cfg.series.forEach((s, si) => {
+      const ps = s.points.filter(p => p.y != null); if (!ps.length) return;
+      const d = ps.map((p, i) => `${i ? 'L' : 'M'}${X(p.t).toFixed(1)},${Y(p.y).toFixed(1)}`).join('');
+      if (s.area) {
+        const gid = `g${el.dataset.chart.replace(/[^a-z0-9]/gi, '')}${si}`;
+        g += `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.color}" stop-opacity=".18"/><stop offset="1" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs>`;
+        g += `<path d="${d}L${X(ps[ps.length - 1].t).toFixed(1)},${H - pad.b}L${X(ps[0].t).toFixed(1)},${H - pad.b}Z" fill="url(#${gid})"/>`;
+      }
+      g += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.width || 2}" ${s.dashed ? 'stroke-dasharray="6 4"' : ''} stroke-linejoin="round" stroke-linecap="round"/>`;
+      ps.forEach(p => g += `<circle cx="${X(p.t)}" cy="${Y(p.y)}" r="${ps.length > 12 ? 0 : 2.6}" fill="#fff" stroke="${s.color}" stroke-width="1.6"/>`);
+    });
+    g += `<circle class="hov" r="5" fill="#fff" stroke-width="2.4" style="display:none"/>`;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = g;
+    const tip = el.querySelector('.tip'), hov = svg.querySelector('.hov');
+    const all = cfg.series.flatMap(s => s.points.filter(p => p.y != null).map(p => ({ s, p, x: X(p.t), y: Y(p.y) })));
+    svg.onmousemove = e => {
+      const b = svg.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
+      let best = null, bd = 1e9; all.forEach(a => { const d = (a.x - mx) ** 2 + ((a.y - my) ** 2) * 0.3; if (d < bd) { bd = d; best = a; } });
+      if (!best || bd > 2500) { tip.style.display = 'none'; hov.style.display = 'none'; return; }
+      hov.style.display = ''; hov.setAttribute('cx', best.x); hov.setAttribute('cy', best.y); hov.setAttribute('stroke', best.s.color);
+      tip.style.display = 'block'; tip.style.left = best.x + 'px'; tip.style.top = best.y + 'px';
+      tip.innerHTML = `<b>${esc(best.s.name)}</b><br>${fmtDate(best.p.t)} · ${esc(yfmt(best.p.y))}${best.p.note ? ' · ' + esc(best.p.note) : ''}`;
+    };
+    svg.onmouseleave = () => { tip.style.display = 'none'; hov.style.display = 'none'; };
+  }
+  // "Price position map": every product as a dot by its % difference from the competitors' average.
+  function drawPosmap(el, cfg) {
+    const svg = el.querySelector('svg'), W = el.clientWidth, H = el.clientHeight; if (!W || !H) return;
+    const small = W < 560, pts = cfg.points;
+    const L = Math.ceil((Math.max(15, ...pts.map(p => Math.abs(p.x))) + 2) / 5) * 5;
+    const pad = { l: 14, r: 14, t: 34, b: 46 };
+    const X = v => pad.l + (Math.max(-L, Math.min(L, v)) + L) / (2 * L) * (W - pad.l - pad.r);
+    const top = pad.t, bot = H - pad.b, midY = (top + bot) / 2;
+    const zones = [
+      { a: -L, b: -cfg.gap, fill: '#EEF3FF', c: '#1D4ED8', t: small ? 'أرخص' : 'أرخص من السوق — فرصة لزيادة الربح' },
+      { a: -cfg.gap, b: cfg.tol, fill: '#E9F9EF', c: '#15803D', t: small ? 'تنافسي' : 'سعر تنافسي' },
+      { a: cfg.tol, b: L, fill: '#FDEDED', c: '#C62828', t: small ? 'أغلى' : 'أغلى من السوق' },
+    ];
+    let g = '';
+    zones.forEach(z => { g += `<rect x="${X(z.a)}" y="${top}" width="${X(z.b) - X(z.a)}" height="${bot - top}" fill="${z.fill}"/><text x="${(X(z.a) + X(z.b)) / 2}" y="${top - 12}" text-anchor="middle" font-size="12.5" font-weight="700" fill="${z.c}">${z.t}</text>`; });
+    g += `<line x1="${X(0)}" x2="${X(0)}" y1="${top - 4}" y2="${bot + 4}" stroke="#1D2230" stroke-width="1.5" stroke-dasharray="4 4" opacity=".55"/>`;
+    const step = L >= 30 ? 10 : 5;
+    for (let v = -L; v <= L; v += step) { if (small && v % 10) continue; g += `<line x1="${X(v)}" x2="${X(v)}" y1="${bot}" y2="${bot + 5}" stroke="#C9CDD6"/><text x="${X(v)}" y="${bot + 18}" text-anchor="middle" font-size="11" fill="#6B7385">${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)}%</text>`; }
+    g += `<text x="${X(0)}" y="${H - 6}" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1D2230">متوسط المنافسين</text>`;
+    g += `<text x="${pad.l}" y="${H - 6}" text-anchor="start" font-size="11.5" fill="#1D4ED8">← أرخص</text><text x="${W - pad.r}" y="${H - 6}" text-anchor="end" font-size="11.5" fill="#C62828">أغلى →</text>`;
+    // beeswarm: keep dots from overlapping
+    const r = small ? 6.5 : 8, d = r * 2 + 2, placed = [];
+    [...pts].sort((a, b) => a.x - b.x).forEach(p => {
+      const cx = X(p.x); let cy = midY;
+      for (let k = 0; k < 40; k++) {
+        const off = k === 0 ? 0 : Math.ceil(k / 2) * (r * 1.15) * (k % 2 ? -1 : 1);
+        const y = midY + off;
+        if (y < top + r || y > bot - r) continue;
+        if (placed.every(q => (q.cx - cx) ** 2 + (q.cy - y) ** 2 >= d * d)) { cy = y; break; }
+      }
+      placed.push({ cx, cy, p });
+    });
+    placed.forEach(({ cx, cy, p }) => { g += `<circle data-act="openP" data-id="${esc(p.id)}" data-tab="market" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r}" fill="${p.color}" fill-opacity=".88" stroke="#fff" stroke-width="1.6" style="cursor:pointer"/>`; });
+    g += `<circle class="hov" r="${r + 3}" fill="none" stroke-width="2.4" style="display:none;pointer-events:none"/>`;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = g;
+    const tip = el.querySelector('.tip'), hov = svg.querySelector('.hov');
+    svg.onmousemove = e => {
+      const b = svg.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
+      const hit = placed.find(q => (q.cx - mx) ** 2 + (q.cy - my) ** 2 <= (r + 3) ** 2);
+      if (!hit) { tip.style.display = 'none'; hov.style.display = 'none'; return; }
+      hov.style.display = ''; hov.setAttribute('cx', hit.cx); hov.setAttribute('cy', hit.cy); hov.setAttribute('stroke', hit.p.color);
+      tip.style.display = 'block'; tip.style.left = hit.cx + 'px'; tip.style.top = (hit.cy - r) + 'px';
+      tip.innerHTML = `<b>${esc(hit.p.name)}</b><br>سعرنا ${esc(egpTxt(hit.p.price))} · متوسط المنافسين ${esc(egpTxt(hit.p.avg))}<br><span class="ltr">${hit.p.x > 0 ? '+' : ''}${fmt(hit.p.x, 1)}%</span> · ${esc(hit.p.label)}`;
+    };
+    svg.onmouseleave = () => { tip.style.display = 'none'; hov.style.display = 'none'; };
+  }
+  function html(id, cfg, height = 260) {
+    registry.set(id, cfg);
+    const legend = (cfg.series || []).map(s => `<span><i class="${s.dashed ? 'dash' : ''}" style="background:${s.color};color:${s.color}"></i>${esc(s.name)}</span>`).join('');
+    return `<div class="fig" data-chart="${id}" style="height:${height}px"><svg role="img" aria-label="${esc(cfg.label || 'رسم بياني')}"></svg><div class="tip" style="display:none"></div></div>${cfg.hideLegend ? '' : `<div class="legend">${legend}</div>`}`;
+  }
+  function mountAll(root = document) {
+    if (!ro) ro = new ResizeObserver(entries => entries.forEach(en => draw(en.target)));
+    root.querySelectorAll('.fig[data-chart]').forEach(el => { if (!el._obs) { ro.observe(el); el._obs = true; } draw(el); });
+  }
+  return { html, mountAll };
+})();
+
+// ---- tour.js ----
+// ===================== tour.js =====================
+// Guided tour: dims the page, spotlights one element per step and explains it.
+// Steps navigate the real app (routes, modals), so the client sees live screens.
+const Tour = (() => {
+  let i = -1, steps = [];
+  const root = () => document.getElementById('tour-root');
+  const tourProduct = () => {
+    const A = analyses(), an = [...db.analyzed].map(id => A.get(id)).filter(Boolean);
+    const best = an.filter(a => a.status === 'opportunity').sort((x, y) => (y.deltaUnit || 0) - (x.deltaUnit || 0))[0] || an.find(a => a.status === 'above') || an[0];
+    return best.product.id;
+  };
+  const defs = () => {
+    const pid = tourProduct();
+    const productModal = () => ({ type: 'product', id: pid, tab: 'market', whatIf: '' });
+    return [
+      { route: 'dashboard', sel: '.g-kpi', title: 'خلاصة السوق في ثانية', text: 'أول ما تفتح النظام تعرف أهم الأرقام: كم منتجًا أغلى من المنافسين، وكم منتجًا سعره تنافسي، وكم فرصة لزيادة الربح. اضغط أي رقم لعرض منتجاته.' },
+      { route: 'dashboard', sel: '#posmap-card', title: 'خريطة أسعارك', text: 'كل نقطة منتج من منتجاتك. يمين الخط المتقطع أغلى من متوسط المنافسين، ويساره أرخص، والمنطقة الخضراء هي السعر التنافسي. اضغط أي نقطة لتفاصيلها.' },
+      { route: 'products', sel: '#sel-card', title: 'اختر ما تريد تحليله', text: 'حدد بالفئة أو العلامة التجارية أو منتجات بعينها، واستبعد ما لا تريده، واحفظ اختيارك كمجموعة تستخدمها كل مرة.' },
+      { route: 'competitors', prep: () => { state.comp.section = 'review'; state.comp.tab = 'pending'; state.comp.compId = ''; }, sel: '#comp-card tbody tr:first-child', title: 'أنت من يؤكد الروابط', text: 'النظام يجد المنتج عند المنافسين ويوضح ما يتطابق: الموديل والعلامة والمواصفات ومحتويات العبوة. لا يدخل أي سعر في المقارنة قبل أن تؤكد أنه نفس المنتج.' },
+      { route: 'analysis', prep: () => { state.ana.status = ''; state.ana.scope = 'analyzed'; state.ana.q = ''; state.ana.cat = ''; }, sel: '#status-filter', title: 'نتيجة واضحة لكل منتج', text: 'أربع حالات فقط: أعلى من السوق، سعر تنافسي، فرصة لزيادة الربح، أو بيانات غير كافية — والأرقام كاملة في الجدول.' },
+      { route: 'analysis', modal: productModal, sel: '.verdict', title: 'توصية بلغة بسيطة', text: 'لكل منتج الخلاصة في جملة واحدة، ثم سعر كل منافس وتغيّر الأسعار خلال آخر 8 أسابيع.' },
+      { route: 'analysis', modal: productModal, sel: '.reco', adminOnly: true, title: 'سعر مقترح يحمي ربحك', text: 'السعر المقترح لا ينزل أبدًا عن الحد الأدنى الآمن لهامش الربح، ويمكنك تجربة أي سعر لترى ربحه قبل القرار. النظام يقترح فقط ولا يغيّر أي سعر في المتجر.' },
+      { route: 'reports', sel: '#rep-head', title: 'تقارير جاهزة للمشاركة', text: 'خمسة تقارير جاهزة، وتصدير كل النتائج إلى Excel بضغطة واحدة.' },
+      { route: 'dashboard', final: true, title: 'هذه فكرة النظام كاملة', text: 'النسخة الفعلية تعمل بنفس الطريقة، مع اتصال مباشر بالمتجر (قراءة فقط) ومراقبة آلية لأسعار المنافسين في الخلفية.' },
+    ].filter(s => !s.adminOnly || isAdmin());
+  };
+  function start() { steps = defs(); i = 0; window.addEventListener('resize', place); document.addEventListener('scroll', place, true); show(); }
+  function end(goHome) {
+    if (i < 0) return;
+    i = -1; root().innerHTML = '';
+    window.removeEventListener('resize', place); document.removeEventListener('scroll', place, true);
+    if (state.modal && state.modal.byTour) state.modal = null;
+    if (goHome) { state.route = 'dashboard'; try { history.replaceState(null, '', '#dashboard'); } catch (e) { } window.scrollTo(0, 0); }
+    render();
+  }
+  const next = () => { if (i < steps.length - 1) { i++; show(); } else end(true); };
+  const prev = () => { if (i > 0) { i--; show(); } };
+  function show() {
+    const s = steps[i];
+    if (s.prep) s.prep();
+    state.modal = s.modal ? { ...s.modal(), byTour: true } : null;
+    if (state.route !== s.route) { state.route = s.route; try { history.replaceState(null, '', '#' + s.route); } catch (e) { } }
+    if (!s.modal) window.scrollTo(0, 0);
+    render();
+    const dots = steps.map((_, k) => `<i class="${k === i ? 'on' : k < i ? 'done' : ''}"></i>`).join('');
+    const flow = s.final ? `<div class="t-flow">${['المتجر (قراءة فقط)', 'النظام', 'المنافسون', 'مراجعتك', 'التحليل', 'التقارير'].map((t, k) => `${k ? '<span class="t-arr">←</span>' : ''}<span class="t-node">${t}</span>`).join('')}</div>` : '';
+    root().innerHTML = `<div class="tour-block ${s.final ? 'dim' : ''}"></div>${s.final ? '' : '<div class="tour-spot"></div>'}
+      <div class="tour-card ${s.final ? 'final' : ''}" role="dialog" aria-modal="true" aria-label="${esc(s.title)}">
+        <button class="icon-btn t-x" data-act="tourEnd" aria-label="إنهاء الجولة">${ic('x', 'width="16" height="16" stroke="currentColor"')}</button>
+        <div class="t-step">${s.final ? 'نهاية الجولة' : `الخطوة ${i + 1} من ${steps.length - 1}`}</div>
+        <h4>${esc(s.title)}</h4><p>${esc(s.text)}</p>${flow}
+        <div class="t-foot"><div class="t-dots">${dots}</div>
+          ${s.final ? `<button class="btn sm" data-act="tourRestart">${ic('undo')} إعادة الجولة</button><button class="btn sm primary" data-act="tourEnd" data-v="home">ابدأ الاستكشاف</button>`
+            : `${i ? `<button class="btn sm ghost" data-act="tourPrev">السابق</button>` : ''}<button class="btn sm primary" data-act="tourNext">${i === steps.length - 2 ? 'إنهاء' : 'التالي'} ←</button>`}
+        </div></div>`;
+    const t = s.sel && document.querySelector(s.sel);
+    if (t) t.scrollIntoView({ block: 'center', inline: 'nearest' });
+    place();
+    requestAnimationFrame(place);
+    root().querySelector('.tour-card .btn.primary')?.focus({ preventScroll: true });
+  }
+  function place() {
+    if (i < 0) return;
+    const s = steps[i], card = root().querySelector('.tour-card'), spot = root().querySelector('.tour-spot');
+    if (!card) return;
+    const vw = window.innerWidth, vh = window.innerHeight, m = 12;
+    const cw = card.offsetWidth, ch = card.offsetHeight;
+    const t = s.sel && document.querySelector(s.sel);
+    if (!t || s.final) { card.style.left = Math.max(m, (vw - cw) / 2) + 'px'; card.style.top = Math.max(m, (vh - ch) / 2) + 'px'; return; }
+    const r = t.getBoundingClientRect(), p = 8;
+    const sx = Math.max(4, r.left - p), sy = Math.max(4, r.top - p);
+    const sw = Math.min(vw - 4, r.right + p) - sx, sh = Math.min(vh - 4, r.bottom + p) - sy;
+    Object.assign(spot.style, { left: sx + 'px', top: sy + 'px', width: sw + 'px', height: sh + 'px' });
+    let top;
+    if (vh - (sy + sh) >= ch + m * 2) top = sy + sh + m;
+    else if (sy >= ch + m * 2) top = sy - ch - m;
+    else top = vh - ch - m;
+    let left = r.left + r.width / 2 - cw / 2;
+    left = Math.max(m, Math.min(vw - cw - m, left));
+    card.style.left = left + 'px'; card.style.top = Math.max(m, top) + 'px';
+  }
+  return { start, end, next, prev, restart: () => { i = 0; show(); }, get active() { return i >= 0; } };
+})();
+
+// ---- app.js ----
+// ===================== app.js =====================
+// UI state, views (one function per section) and actions. Views are pure string
+// renderers of `state` + `db`; actions call `api.*` and re-render. Each view maps 1:1
+// to a future React page component.
+
+const SETTINGS_DEFAULT = { targetMargin: 20, staleDays: 7, tolerance: 3, opportunityGap: 5, undercut: 2, minObservations: 2 };
+const LS = (() => { try { const s = window.localStorage; s.setItem('alk-mi-t', '1'); s.removeItem('alk-mi-t'); return s; } catch (e) { return null; } })();
+const loadLS = (k, d) => { try { const v = LS && LS.getItem('alk-mi-' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+const saveLS = (k, v) => { try { LS && LS.setItem('alk-mi-' + k, JSON.stringify(v)); } catch (e) { } };
+
+const emptySel = () => ({ all: false, cats: [], brands: [], products: [], exCats: [], exBrands: [], exProducts: [], combine: 'and', rule: null });
+const clone = o => JSON.parse(JSON.stringify(o));
+const DEFAULT_GROUPS = [
+  { id: 'g1', name: 'كل منتجات TOTAL', sel: { ...emptySel(), brands: ['TOTAL'] }, builtin: true },
+  { id: 'g2', name: 'العدد الكهربائية', sel: { ...emptySel(), cats: ['power'] }, builtin: true },
+  { id: 'g3', name: 'منتجات بهامش ربح منخفض', sel: { ...emptySel(), all: true, rule: 'lowMargin' }, builtin: true, sensitive: true },
+];
+const ROUTES = ['dashboard', 'products', 'competitors', 'analysis', 'reports'];
+const NAV = [['dashboard', 'الرئيسية', 'home'], ['products', 'المنتجات', 'box'], ['competitors', 'المنافسون', 'store'], ['analysis', 'تحليل السوق', 'chart'], ['reports', 'التقارير', 'file']];
+
+const state = {
+  route: ROUTES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'dashboard',
+  role: loadLS('role', 'admin'),
+  settings: { ...SETTINGS_DEFAULT, targetMargin: loadLS('margin', 20) },
+  sel: emptySel(),
+  groups: loadLS('groups', null) || clone(DEFAULT_GROUPS),
+  dismissed: new Set(),
+  bannerHidden: false,
+  cat: { q: '', cat: '', brand: '', stock: '', onlySel: false },
+  ana: { q: '', status: '', cat: '', scope: 'analyzed', sort: 'diff' },
+  comp: { tab: 'pending', compId: '', section: null },
+  rep: { tab: 'above' },
+  disc: { q: '', productId: null, loading: false, results: null, picking: false },
+  dash: { cat: '' },
+  modal: null,
+  cover: !loadLS('seenIntro', false),
+};
+const isAdmin = () => state.role === 'admin';
+const P = id => db.products.find(p => p.id === id);
+const C = id => db.competitors.find(c => c.id === id);
+const STOCK = { in: ['متوفر', 'b-green'], low: ['كمية محدودة', 'b-amber'], out: ['نفد', 'b-red'] };
+const stockBadge = p => `<span class="badge ${STOCK[p.stock][1]}">${STOCK[p.stock][0]}</span> <span class="small muted num">${p.qty}</span>`;
+const SIGNALS = [['model', 'الموديل'], ['sku', 'SKU'], ['brand', 'العلامة'], ['specs', 'المواصفات'], ['pkg', 'محتويات العبوة']];
+const signalsHtml = s => `<div class="signals">${SIGNALS.map(([k, l]) => `<span class="sig ${s[k]}" title="${s[k] === 'y' ? 'متطابق' : s[k] === 'n' ? 'مختلف' : 'غير متاح للمقارنة'}">${s[k] === 'y' ? '✓' : s[k] === 'n' ? '✗' : '؟'} ${l}</span>`).join('')}</div>`;
+const MATCH_ST = { approved: ['مؤكد', 'b-green'], pending: ['بانتظار التأكيد', 'b-amber'], rejected: ['مرفوض', 'b-gray'] };
+const PAGE_HINT = { dashboard: 'نظرة سريعة على أسعارنا مقارنة بالمنافسين وما يحتاج انتباهك', products: 'منتجات المتجر — اختر منها ما تريد تحليله', competitors: 'أضف المنافسين وأكّد روابط منتجاتهم المطابقة لمنتجاتنا', analysis: 'مقارنة أسعارنا بأسعار المنافسين والسعر المقترح لكل منتج', reports: 'ملخصات جاهزة يمكن تصديرها إلى Excel' };
+const matchBadge = s => `<span class="badge ${MATCH_ST[s][1]}">${MATCH_ST[s][0]}</span>`;
+const compAvatar = c => `<span class="c-av" style="background:${c.color}">${esc(c.name.trim()[0] || '؟')}</span>`;
+const matchesQ = (p, q) => { if (!q) return true; const n = normalize(q); return [p.name, p.sku, p.model, p.brand].some(v => normalize(v).includes(n)); };
+const safeUrl = u => /^https?:\/\//i.test(u) ? esc(u) : '#';
+
+// ---------- analysis cache ----------
+function analyses() {
+  const map = new Map();
+  db.products.forEach(p => map.set(p.id, Pricing.analyze(p, db.matches, state.settings)));
+  return map;
+}
+
+// ---------- selection model ----------
+function selResolve(sel = state.sel) {
+  let base;
+  if (sel.all) base = db.products.slice();
+  else {
+    const hc = sel.cats.length, hb = sel.brands.length;
+    base = db.products.filter(p => {
+      let g = false;
+      if (hc && hb) g = sel.combine === 'and' ? (sel.cats.includes(p.cat) && sel.brands.includes(p.brand)) : (sel.cats.includes(p.cat) || sel.brands.includes(p.brand));
+      else if (hc) g = sel.cats.includes(p.cat);
+      else if (hb) g = sel.brands.includes(p.brand);
+      return g || sel.products.includes(p.id);
+    });
+  }
+  if (sel.rule === 'lowMargin') base = base.filter(p => Pricing.margin(p.price, p.cost) < state.settings.targetMargin);
+  return base.filter(p => !sel.exCats.includes(p.cat) && !sel.exBrands.includes(p.brand) && !sel.exProducts.includes(p.id));
+}
+const selEmpty = (s = state.sel) => !s.all && !s.cats.length && !s.brands.length && !s.products.length && !s.rule;
+function selDescribe(s = state.sel) {
+  if (selEmpty(s) && !s.exCats.length && !s.exBrands.length && !s.exProducts.length) return 'لم يتم اختيار منتجات بعد';
+  const parts = [];
+  if (s.all) parts.push('كل المنتجات');
+  if (s.cats.length) parts.push('الفئات: ' + s.cats.map(c => CAT[c].name).join('، '));
+  if (s.brands.length) parts.push('العلامات: ' + s.brands.join('، '));
+  if (s.cats.length && s.brands.length) parts.push(s.combine === 'and' ? '(الفئة والعلامة معًا)' : '(الفئة أو العلامة)');
+  if (s.products.length) parts.push(`منتجات محددة: ${s.products.length}`);
+  if (s.rule === 'lowMargin') parts.push('بشرط: هامش أقل من المستهدف');
+  const ex = [...s.exCats.map(c => CAT[c].name), ...s.exBrands, ...(s.exProducts.length ? [cnt(s.exProducts.length, 'product')] : [])];
+  if (ex.length) parts.push('باستثناء: ' + ex.join('، '));
+  return parts.join(' · ');
+}
+const pull = (arr, v) => { const i = arr.indexOf(v); if (i > -1) arr.splice(i, 1); };
+function cycleFacet(kind, v) {
+  const s = state.sel, inc = kind === 'cat' ? s.cats : s.brands, exc = kind === 'cat' ? s.exCats : s.exBrands;
+  if (inc.includes(v)) { pull(inc, v); exc.push(v); }
+  else if (exc.includes(v)) pull(exc, v);
+  else if (s.all) exc.push(v);
+  else inc.push(v);
+}
+function toggleProduct(id) {
+  const s = state.sel, isSel = () => selResolve().some(p => p.id === id);
+  if (isSel()) { pull(s.products, id); if (isSel()) s.exProducts.push(id); return true; }
+  pull(s.exProducts, id); if (!isSel()) s.products.push(id);
+  if (!isSel()) { pull(s.products, id); toast('هذا المنتج ضمن فئة أو علامة مستبعدة — أزل الاستبعاد أولًا', 'err'); return false; }
+  return true;
+}
+
+// ---------- shell ----------
+function renderNav() {
+  const pending = db.matches.filter(m => m.status === 'pending').length;
+  document.getElementById('nav').innerHTML = NAV.map(([r, l, i]) => `<button data-act="go" data-v="${r}" class="${state.route === r ? 'active' : ''}" title="${l}" aria-current="${state.route === r ? 'page' : 'false'}">${ic(i)}<span class="lbl">${l}</span>${r === 'competitors' && pending ? `<span class="count">${pending}</span>` : ''}</button>`).join('');
+}
+function renderTopbar() {
+  const title = NAV.find(n => n[0] === state.route)[1];
+  document.getElementById('topbar').innerHTML = `<div class="title-wrap"><div style="display:flex;align-items:center;gap:10px"><h1>${title}</h1><span class="demo-badge" title="جميع الأسعار والمنافسين والمنتجات تجريبية">بيانات تجريبية</span></div><div class="page-hint">${state.route === 'dashboard' ? esc(marketHeadline()) : PAGE_HINT[state.route]}</div></div><span class="spacer"></span>
+    <button class="btn ghost tour-btn" data-act="startTour">${ic('play')}<span>جولة تعريفية</span></button>
+    <div class="seg" role="group" aria-label="صلاحية العرض" title="غيّر الصلاحية لترى ما يظهر لكل مستخدم"><button data-act="role" data-v="admin" class="${isAdmin() ? 'on' : ''}">مدير التسعير</button><button data-act="role" data-v="viewer" class="${!isAdmin() ? 'on' : ''}">مستخدم محدود</button></div>
+    `;
+}
+
+// ===================== A. DASHBOARD =====================
+function marketTrend(cat) {
+  const now = Date.now(), B = 8;
+  const bucketOf = t => Math.min(B - 1, Math.max(0, Math.floor((now - t) / (7 * DAY))));
+  const prods = [...db.analyzed].map(P).filter(p => p && (!cat || p.cat === cat));
+  const mkt = Array.from({ length: B }, () => []), our = Array.from({ length: B }, () => []);
+  prods.forEach(p => {
+    const ms = db.matches.filter(m => m.productId === p.id && m.status === 'approved');
+    const per = Array.from({ length: B }, () => []);
+    ms.forEach(m => { const last = {}; m.history.forEach(h => { if (h.price) last[bucketOf(h.t)] = h.price; }); Object.entries(last).forEach(([b, v]) => per[b].push(v)); });
+    const cur = avg(per[0]);
+    if (cur) per.forEach((arr, b) => { if (arr.length) mkt[b].push(avg(arr) / cur * 100); });
+    const oh = db.ourHistory[p.id] || []; const ol = {}; oh.forEach(h => ol[bucketOf(h.t)] = h.price);
+    if (ol[0]) Object.entries(ol).forEach(([b, v]) => our[b].push(v / ol[0] * 100));
+  });
+  const pts = arr => arr.map((v, b) => ({ t: now - b * 7 * DAY, y: v.length ? avg(v) : null })).reverse();
+  return { market: pts(mkt), ours: pts(our), n: prods.length };
+}
+function computeAlerts(A) {
+  const out = [], analyzed = [...db.analyzed].map(id => A.get(id)).filter(Boolean);
+  const hi = analyzed.filter(a => a.status === 'above' && a.diffPct > 8).sort((x, y) => y.diffPct - x.diffPct);
+  hi.slice(0, 3).forEach(a => out.push({ key: 'above-' + a.product.id, sev: 'danger', text: `${a.product.name}: أغلى من متوسط المنافسين بنسبة ${isoPct(a.diffPct)}`, meta: `سعرنا ${egpTxt(a.product.price)} · متوسط المنافسين ${egpTxt(a.avg)}`, product: a.product.id }));
+  const floor = isAdmin() ? analyzed.filter(a => a.cannotCompete) : [];
+  floor.slice(0, 2).forEach(a => out.push({ key: 'floor-' + a.product.id, sev: 'warn', text: `${a.product.name}: لا يمكن مجاراة المنافسين دون خسارة الهامش`, meta: 'حتى أغلى منافس أرخص من الحد الأدنى الآمن — راجع سعر الشراء مع المورد', product: a.product.id }));
+  if (floor.length > 2) out.push({ key: 'floor-more-' + floor.length, sev: 'warn', text: `منتجات أخرى (${floor.length - 2}) لا يمكن مجاراة سعرها دون خسارة الهامش`, meta: 'اعرضها في تحليل السوق', goStatus: 'above' });
+  if (hi.length > 3) out.push({ key: 'above-more-' + hi.length, sev: 'danger', text: `منتجات أخرى (${hi.length - 3}) أغلى من المنافسين بأكثر من ${isoPct(8, 0)}`, meta: 'اعرضها في تحليل السوق', goStatus: 'above' });
+  const pend = db.matches.filter(m => m.status === 'pending').length;
+  if (pend) out.push({ key: 'pending-' + pend, sev: 'info', text: `${cnt(pend, 'link')} بانتظار تأكيدك`, meta: 'الروابط غير المؤكدة لا تدخل في المقارنة', go: 'competitors' });
+  const needs = analyzed.filter(a => a.status === 'needs').length;
+  if (needs) out.push({ key: 'needs-' + needs, sev: 'warn', text: `${cnt(needs, 'product')} بدون أسعار منافسين كافية`, meta: 'ابحث لها عن روابط عند المنافسين ثم أكّدها', goStatus: 'needs' });
+  if (isAdmin()) analyzed.filter(a => a.status === 'opportunity').sort((x, y) => y.deltaUnit - x.deltaUnit).slice(0, 2).forEach(a => out.push({ key: 'opp-' + a.product.id, sev: 'info', text: `فرصة: يمكن رفع سعر ${a.product.name} إلى ${egpTxt(a.suggested)}`, meta: `ربح إضافي ${egpTxt(a.deltaUnit)} في كل قطعة، وسنظل أرخص من متوسط المنافسين`, product: a.product.id }));
+  return out.filter(a => !state.dismissed.has(a.key));
+}
+// One-line market insight (shown under the dashboard title)
+function marketHeadline() {
+  const A = analyses(), an = [...db.analyzed].map(id => A.get(id)).filter(Boolean);
+  const above = an.filter(a => a.status === 'above').length, opp = an.filter(a => a.status === 'opportunity').length;
+  return above && opp ? `${cnt(above, 'product')} أغلى من المنافسين، و${cnt(opp, 'opp')} لزيادة الربح`
+    : above ? `${cnt(above, 'product')} أغلى من المنافسين` : opp ? `${cnt(opp, 'opp')} لزيادة الربح` : 'أسعارك متوافقة مع السوق';
+}
+function viewDashboard() {
+  const A = analyses(), adm = isAdmin();
+  const an = [...db.analyzed].map(id => A.get(id)).filter(Boolean);
+  const by = s => an.filter(a => a.status === s);
+  const opp = by('opportunity'), oppSum = sum(opp.map(a => a.deltaUnit || 0));
+  const kpi = (label, val, foot, color, icon, act, v = '') => `<div class="card kpi" data-act="${act}" data-v="${v}" role="button" tabindex="0"><div class="k-top"><span class="k-ic" style="color:${color};background:color-mix(in srgb,${color} 11%,#fff)">${ic(icon, 'stroke="currentColor"')}</span><div class="k-val">${val}</div></div><div class="k-label">${label}</div><div class="k-foot">${foot}</div></div>`;
+  const tr = marketTrend(state.dash.cat);
+  const lastM = tr.market.filter(p => p.y != null), mChange = lastM.length > 1 ? lastM[lastM.length - 1].y - lastM[0].y : 0;
+  const alerts = computeAlerts(A);
+  const sevIc = { danger: ['alert', 'var(--red-50)', 'var(--red)'], warn: ['alert', 'var(--amber-50)', 'var(--amber)'], info: ['info', 'var(--blue-50)', 'var(--blue)'] };
+  const upIc = { down: ['trendDown', 'var(--red-50)', 'var(--red)'], up: ['trendUp', 'var(--green-50)', 'var(--green)'], stock: ['box', 'var(--amber-50)', 'var(--amber)'], sync: ['sync', 'var(--orange-50)', 'var(--orange-600)'], analysis: ['chart', 'var(--orange-50)', 'var(--orange-600)'], match: ['check', 'var(--green-50)', 'var(--green)'], comp: ['store', 'var(--blue-50)', 'var(--blue)'] };
+  const trendTxt = mChange < -0.3 ? `أسعار المنافسين <b>انخفضت</b> بنحو ${isoPct(Math.abs(mChange))} خلال آخر 8 أسابيع` : mChange > 0.3 ? `أسعار المنافسين <b>ارتفعت</b> بنحو ${isoPct(mChange)} خلال آخر 8 أسابيع` : 'أسعار المنافسين <b>مستقرة</b> تقريبًا خلال آخر 8 أسابيع';
+  const points = an.filter(a => a.status !== 'needs').map(a => ({ id: a.product.id, x: a.diffPct, color: STATUS[a.status].color, name: a.product.name, price: a.product.price, avg: a.avg, label: STATUS[a.status].label }));
+  return `
+  <div class="grid g-kpi">
+    ${kpi('منتجات المتجر', fmt(db.products.length), `آخر مزامنة ${relTime(db.lastSync)}`, '#475569', 'box', 'go', 'products')}
+    ${kpi('تم تحليلها', fmt(an.length), `آخر تحليل ${relTime(db.lastAnalysis)}`, '#F26B1D', 'chart', 'goStatus', '')}
+    ${kpi(STATUS.above.label, fmt(by('above').length), 'سعرنا أغلى من المنافسين', STATUS.above.color, 'trendUp', 'goStatus', 'above')}
+    ${kpi(STATUS.competitive.label, fmt(by('competitive').length), 'قريب من متوسط المنافسين', STATUS.competitive.color, 'check', 'goStatus', 'competitive')}
+    ${kpi(STATUS.opportunity.label, fmt(opp.length), adm ? `ربح إضافي محتمل ${egpTxt(oppSum)}` : 'سعرنا أرخص من السوق بوضوح', STATUS.opportunity.color, 'tag', 'goStatus', 'opportunity')}
+  </div>
+  <div class="card" id="posmap-card" style="margin-top:16px">
+    <div class="card-h"><div><h2>خريطة أسعارك مقارنة بالمنافسين</h2><div class="sub">كل نقطة منتج — اضغط أي نقطة لعرض تفاصيله</div></div></div>
+    <div class="card-b">${Charts.html('posmap', { type: 'posmap', label: 'خريطة أسعار المنتجات مقارنة بمتوسط المنافسين', points, tol: state.settings.tolerance, gap: state.settings.opportunityGap, hideLegend: true }, 230)}</div>
+  </div>
+  <div class="grid g-2e" style="margin-top:16px">
+    <div class="card" id="alerts-card"><div class="card-h"><h2>تنبيهات مهمة</h2>${state.dismissed.size ? `<div class="actions"><button class="btn sm ghost" data-act="restoreAlerts">${ic('undo')} إظهار المخفي</button></div>` : ''}</div>
+      <div class="card-b" style="padding-top:4px;padding-bottom:4px"><div class="list">
+      ${alerts.length ? alerts.slice(0, 4).map(a => `<div class="li click" data-act="alert" data-key="${esc(a.key)}"><span class="ic" style="background:${sevIc[a.sev][1]};color:${sevIc[a.sev][2]}">${ic(sevIc[a.sev][0], 'stroke="currentColor"')}</span><div><div class="t">${esc(a.text)}</div><div class="m">${esc(a.meta)}</div></div><div class="act"><button class="icon-btn" data-act="dismiss" data-key="${esc(a.key)}" title="إخفاء التنبيه" aria-label="إخفاء">${ic('x', 'width="15" height="15" stroke="currentColor"')}</button></div></div>`).join('') : `<div class="empty"><b>لا توجد تنبيهات الآن</b></div>`}
+      </div></div></div>
+    <div class="card"><div class="card-h"><h2>آخر تحديثات السوق</h2></div>
+      <div class="card-b" style="padding-top:4px;padding-bottom:4px"><div class="list">
+      ${db.updates.slice(0, 4).map(u => { const k = upIc[u.type] || upIc.sync; return `<div class="li ${u.productId ? 'click' : ''}" ${u.productId ? `data-act="openP" data-id="${u.productId}" data-tab="market"` : ''}><span class="ic" style="background:${k[1]};color:${k[2]}">${ic(k[0], 'stroke="currentColor"')}</span><div><div class="t">${esc(u.text)}</div><div class="m">${relTime(u.t)}</div></div></div>`; }).join('')}
+      </div></div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-h"><div><h2>اتجاه أسعار السوق</h2><div class="sub">${trendTxt}</div></div>
+      <div class="actions"><select class="select" style="width:auto" data-ch="dashCat" aria-label="الفئة"><option value="">كل الفئات</option>${CATEGORIES.map(c => `<option value="${c.id}" ${state.dash.cat === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div></div>
+    <div class="card-b">${Charts.html('trend', { label: 'اتجاه أسعار السوق', yFormat: v => fmt(v, 1), series: [{ name: 'متوسط أسعار المنافسين (سعر هذا الأسبوع = 100)', color: '#1D2230', area: true, points: tr.market }, { name: 'أسعار الخليلي', color: '#F26B1D', width: 2.5, points: tr.ours }] }, 220)}</div>
+  </div>`;
+}
+
+// ---------- welcome cover (first visit) ----------
+function coverHtml() {
+  const A = analyses(), an = [...db.analyzed].map(id => A.get(id)).filter(Boolean), adm = isAdmin();
+  const ab = an.filter(a => a.status === 'above' && a.n >= 3).sort((x, y) => y.diffPct - x.diffPct)[0] || an.find(a => a.status === 'above') || an[0];
+  const prices = ab.rows.filter(r => r.ok).map(r => r.m.price), our = ab.product.price;
+  const lo = Math.min(...prices, our) * 0.97, hi = Math.max(...prices, our) * 1.03, pos = v => ((v - lo) / (hi - lo) * 100).toFixed(1);
+  const vals = [['store', 'مقارنة دقيقة مع المنافسين', 'نفس المنتج ونفس الموديل، بأسعار محدّثة باستمرار'], ['tag', 'سعر مقترح يحمي ربحك', 'لا ينزل أبدًا عن الحد الأدنى الآمن لهامش الربح'], ['check', 'القرار دائمًا لك', 'النظام يقترح فقط ولا يغيّر أي سعر في المتجر']];
+  return `<div class="cover" role="dialog" aria-modal="true" aria-label="مرحبًا بك">
+    <div class="cv-wrap">
+      <div class="cv-text">
+        <div class="cv-brand"><div class="brand-mark lg">خ</div><div><div class="cv-bn">الخليلي</div><div class="cv-bs">Market Intelligence</div></div></div>
+        <span class="cv-pill">نسخة عرض تجريبية</span>
+        <h1 class="cv-h">اعرف موقع أسعارك في السوق… <span>وقرّر بثقة</span></h1>
+        <p class="cv-p">نظام يقارن أسعار منتجاتك بأسعار المنافسين، وينبهك للمنتجات الأغلى من السوق، ويقترح سعرًا مناسبًا لا ينزل أبدًا عن هامش الربح المستهدف.</p>
+        <ul class="cv-vals">${vals.map(([i, t, d]) => `<li><span class="cv-vi">${ic(i, 'stroke="currentColor"')}</span><div><b>${t}</b><span>${d}</span></div></li>`).join('')}</ul>
+        <div class="cv-cta"><button class="btn primary lg" data-act="startTour">${ic('play')} ابدأ الجولة التعريفية <small>· دقيقة واحدة</small></button><button class="btn lg" data-act="explore">استكشف بنفسك</button></div>
+        <div class="cv-note">كل المنتجات والأسعار والمنافسين في هذه النسخة بيانات تجريبية.</div>
+      </div>
+      <div class="cv-visual" aria-hidden="true">
+        <div class="cv-card cv-main">
+          <div class="cv-ch">${productImage(ab.product)}<div class="cv-pn"><b>${esc(ab.product.name)}</b><span class="mono ltr">${esc(ab.product.model)}</span></div>${statusBadge(ab.status)}</div>
+          <div class="cv-track"><div class="cv-line"></div>
+            ${prices.map(v => `<span class="cv-dot" style="left:${pos(v)}%"></span>`).join('')}
+            <span class="cv-avg" style="left:${pos(ab.avg)}%"></span>
+            <span class="cv-our" style="left:${pos(our)}%"><em>سعرنا ${fmt(our)}</em></span>
+          </div>
+          <div class="cv-scale"><span>أرخص منافس<br><b class="num">${fmt(ab.min)}</b></span><span>متوسط المنافسين<br><b class="num">${fmt(ab.avg)}</b></span><span>أغلى منافس<br><b class="num">${fmt(ab.max)}</b></span></div>
+          <div class="cv-verdict">${ic('trendUp', 'width="16" height="16" stroke="currentColor"')} أغلى من متوسط المنافسين بنسبة ${isoPct(ab.diffPct)}</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderCover() {
+  const el = document.getElementById('cover-root');
+  el.innerHTML = state.cover ? coverHtml() : '';
+  document.body.classList.toggle('no-scroll', !!state.cover);
+}
+
+// ===================== B. PRODUCT CATALOG =====================
+function viewProducts() {
+  const f = state.cat, s = state.sel;
+  const chosen = selResolve(), chosenSet = new Set(chosen.map(p => p.id));
+  const rows = db.products.filter(p => (!f.cat || p.cat === f.cat) && (!f.brand || p.brand === f.brand) && (!f.stock || p.stock === f.stock) && (!f.onlySel || chosenSet.has(p.id)) && matchesQ(p, f.q));
+  const allVisSel = rows.length && rows.every(p => chosenSet.has(p.id));
+  const facetCls = (inc, exc, v) => inc.includes(v) ? 'inc' : exc.includes(v) ? 'exc' : '';
+  const excludedBy = p => s.exProducts.includes(p.id) || s.exCats.includes(p.cat) || s.exBrands.includes(p.brand);
+  const groups = state.groups.filter(g => isAdmin() || !g.sensitive);
+  return `
+  <div class="card" id="sel-card">
+    <div class="card-h"><div><h2>ما المنتجات التي تريد تحليلها؟</h2><div class="sub">ضغطة على الفئة أو العلامة = إضافة، وضغطة ثانية = استبعاد. ويمكنك تحديد منتجات بعينها من الجدول.</div></div>
+      <div class="actions"><button class="btn sm ghost" data-act="selClear" ${selEmpty() && !s.exCats.length && !s.exBrands.length && !s.exProducts.length ? 'disabled' : ''}>مسح الاختيار</button></div></div>
+    <div class="card-b" style="padding-top:6px;padding-bottom:6px">
+      <div class="sel-row"><div class="lbl">اختيار سريع</div><div class="chips">
+        <button class="chip ${s.all ? 'inc' : ''}" data-act="selAll">كل المنتجات <span class="c-n">${db.products.length}</span></button>
+        ${isAdmin() ? `<button class="chip ${s.rule === 'lowMargin' ? 'inc' : ''}" data-act="selRule" title="هامش الربح الحالي أقل من الهامش المستهدف">هامش أقل من ${state.settings.targetMargin}% فقط</button>` : ''}
+      </div></div>
+      <div class="sel-row"><div class="lbl">الفئات</div><div class="chips">${CATEGORIES.map(c => `<button class="chip ${facetCls(s.cats, s.exCats, c.id)}" data-act="facet" data-k="cat" data-v="${c.id}">${c.name} <span class="c-n">${db.products.filter(p => p.cat === c.id).length}</span></button>`).join('')}</div></div>
+      <div class="sel-row"><div class="lbl">العلامات التجارية</div><div class="chips">${BRANDS.map(b => `<button class="chip ${facetCls(s.brands, s.exBrands, b)}" data-act="facet" data-k="brand" data-v="${b}"><span class="ltr">${b}</span> <span class="c-n">${db.products.filter(p => p.brand === b).length}</span></button>`).join('')}</div></div>
+      ${s.cats.length && s.brands.length && !s.all ? `<div class="sel-row"><div class="lbl">طريقة الدمج</div><div><div class="seg"><button class="${s.combine === 'and' ? 'on' : ''}" data-act="combine" data-v="and">الفئة <b>و</b> العلامة معًا</button><button class="${s.combine === 'or' ? 'on' : ''}" data-act="combine" data-v="or">الفئة <b>أو</b> العلامة</button></div></div></div>` : ''}
+      ${s.exProducts.length || s.products.length ? `<div class="sel-row"><div class="lbl">منتجات محددة</div><div class="chips">${s.products.map(id => `<span class="chip inc">${esc(P(id).name)}<button class="x" data-act="unpick" data-id="${id}" aria-label="إزالة">×</button></span>`).join('')}${s.exProducts.map(id => `<span class="chip exc">${esc(P(id).name)}<button class="x" data-act="unexclude" data-id="${id}" aria-label="إلغاء الاستبعاد">×</button></span>`).join('')}</div></div>` : ''}
+      <div class="sel-row"><div class="lbl">مجموعات محفوظة</div><div class="chips">${groups.map(g => `<span class="chip" data-act="applyGroup" data-id="${g.id}" role="button" tabindex="0">${ic('layers', 'width="14" height="14" stroke="currentColor"')} ${esc(g.name)} <span class="c-n">${selResolve(g.sel).length}</span>${g.builtin ? '' : `<button class="x" data-act="delGroup" data-id="${g.id}" aria-label="حذف المجموعة">×</button>`}</span>`).join('')}</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-h"><div><h2>كل منتجات المتجر</h2><div class="sub">${rows.length} من أصل ${cnt(db.products.length, 'product')} · منقولة من المتجر للقراءة فقط · اضغط على أي منتج لعرض تفاصيله</div></div>
+      <div class="actions"><button class="btn" data-act="sync">${ic('sync')} مزامنة يدوية</button></div></div>
+    <div class="card-b" style="border-bottom:1px solid var(--line-2)">
+      <div class="toolbar">
+        <div class="search">${ic('search')}<input id="cat-q" class="input" placeholder="ابحث بالاسم أو SKU أو رقم الموديل" value="${esc(f.q)}" data-in="catQ" autocomplete="off"></div>
+        <select class="select" data-ch="catCat" aria-label="الفئة"><option value="">كل الفئات</option>${CATEGORIES.map(c => `<option value="${c.id}" ${f.cat === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select>
+        <select class="select" data-ch="catBrand" aria-label="العلامة"><option value="">كل العلامات</option>${BRANDS.map(b => `<option ${f.brand === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th style="width:36px"><input type="checkbox" data-act="selVisible" ${allVisSel ? 'checked' : ''} aria-label="تحديد كل النتائج المعروضة" title="تحديد/إلغاء كل النتائج المعروضة"></th><th>المنتج</th><th>SKU</th><th>رقم الموديل</th><th>العلامة</th><th>الفئة</th><th class="n">سعر البيع</th>${isAdmin() ? '<th class="n">سعر التكلفة</th>' : ''}<th>المخزون</th></tr></thead>
+      <tbody>${rows.length ? rows.map(p => {
+        const on = chosenSet.has(p.id), ex = excludedBy(p);
+        return `<tr class="clickable ${on ? 'sel' : ''} ${ex && !on ? 'excl' : ''}" data-act="openP" data-id="${p.id}" data-tab="info">
+        <td><input type="checkbox" data-act="toggleP" data-id="${p.id}" ${on ? 'checked' : ''} aria-label="اختيار ${esc(p.name)}"></td>
+        <td><div class="p-cell">${productImage(p)}<div><div class="p-name">${esc(p.name)}</div>${ex ? '<span class="badge b-red plain small">مستبعد من التحليل</span>' : db.analyzed.has(p.id) ? '' : '<span class="badge b-gray plain small">لم يُحلل بعد</span>'}</div></div></td>
+        <td><span class="mono ltr">${esc(p.sku)}</span></td><td><span class="mono ltr">${esc(p.model)}</span></td><td><span class="ltr">${esc(p.brand)}</span></td><td class="nowrap">${CAT[p.cat].name}</td>
+        <td class="n">${egp(p.price)}</td>${isAdmin() ? `<td class="n muted">${egp(p.cost)}</td>` : ''}<td class="nowrap">${stockBadge(p)}</td>
+</tr>`;
+      }).join('') : `<tr><td colspan="10"><div class="empty"><b>لا توجد نتائج</b>جرّب تعديل البحث أو الفلاتر</div></td></tr>`}</tbody>
+    </table></div>
+  </div>
+  <div class="selbar" role="region" aria-label="ملخص الاختيار">
+    <div><span>تم اختيار</span> <span class="big">${chosen.length}</span> <span class="meta">من أصل ${cnt(db.products.length, 'product')}${s.exProducts.length + s.exCats.length + s.exBrands.length ? ` · استبعادات: ${s.exProducts.length + s.exCats.length + s.exBrands.length}` : ''}</span><div class="meta">${esc(selDescribe())}</div></div>
+    <span style="flex:1"></span>
+    <button class="btn sm" data-act="saveGroup" ${chosen.length ? '' : 'disabled'}>${ic('save')} حفظ كمجموعة</button>
+    <button class="btn sm primary" data-act="analyzeSel" ${chosen.length ? '' : 'disabled'}>${ic('play')} تحليل المنتجات المختارة</button>
+  </div>`;
+}
+
+// ===================== C. COMPETITORS =====================
+function viewCompetitors() {
+  const cs = state.comp, d = state.disc;
+  const pendAll = db.matches.filter(m => m.status === 'pending').length;
+  const sec = cs.section || (pendAll ? 'review' : 'discover');
+  const secTabs = [['review', 'مراجعة الروابط', pendAll], ['discover', 'البحث عن منتج عند المنافسين', null], ['stores', 'قائمة المنافسين', db.competitors.length]];
+  const head = `<div class="card" id="comp-card"><div class="card-h"><div><h2>المنافسون وروابط منتجاتهم</h2><div class="sub">نربط كل منتج عندنا بنفس المنتج عند المنافسين لمقارنة الأسعار. لا يُستخدم أي رابط في التحليل قبل أن تؤكده.</div></div>
+    <div class="actions"><button class="btn" data-act="addUrl">${ic('link')} إضافة رابط يدويًا</button><button class="btn primary" data-act="addComp">${ic('plus')} إضافة منافس</button></div></div>
+    <div class="tabs" role="tablist">${secTabs.map(([k, l, n]) => `<button role="tab" class="${sec === k ? 'on' : ''}" data-act="compSection" data-v="${k}">${l}${n != null ? `<span class="tc">${n}</span>` : ''}</button>`).join('')}</div>`;
+  let body = '';
+  if (sec === 'stores') {
+    body = `<div class="card-b"><div class="comp-cards">
+    ${db.competitors.map(c => { const ap = db.matches.filter(m => m.compId === c.id && m.status === 'approved').length, pe = db.matches.filter(m => m.compId === c.id && m.status === 'pending').length; return `<div class="card comp"><div class="c-top">${compAvatar(c)}<div><div class="c-name">${esc(c.name)}</div><a class="small ltr" href="${safeUrl(c.website)}" target="_blank" rel="noopener noreferrer">${esc(c.website.replace(/^https?:\/\//, ''))}</a></div></div>
+      <div class="c-row"><span>روابط مؤكدة</span><b>${ap}</b></div><div class="c-row"><span>بانتظار تأكيدك</span><b>${pe}</b></div><div class="c-row"><span>آخر تحديث للأسعار</span><b class="small">${c.lastMonitor ? relTime(c.lastMonitor) : 'لم يتم بعد'}</b></div>
+      <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap"><button class="btn sm" data-act="addUrl" data-comp="${c.id}">${ic('plus')} إضافة رابط</button><button class="btn sm ghost" data-act="filterComp" data-v="${c.id}">عرض روابطه</button></div></div>`; }).join('')}
+    <button class="card comp add" data-act="addComp">${ic('plus', 'width="22" height="22" stroke="currentColor"')}<span>إضافة منافس جديد</span></button>
+    </div></div>`;
+  } else if (sec === 'discover') {
+    const qHits = d.q && d.picking ? db.products.filter(p => matchesQ(p, d.q)).slice(0, 6) : [];
+    const dp = d.productId ? P(d.productId) : null;
+    body = `<div class="card-b">
+      <div class="small muted" style="margin-bottom:10px"><b style="color:var(--ink-2)">كيف تعمل؟</b> اكتب اسم المنتج أو رقم الموديل ← اختر المنتج من متجرنا ← يعرض النظام نتائج محتملة عند المنافسين (محاكاة) ← أكّد النتيجة إذا كانت <b>نفس المنتج تمامًا</b>.</div>
+      <div class="toolbar"><div class="search" style="flex:1 1 320px">${ic('search')}<input id="disc-q" class="input" placeholder="مثال: TG1071356 أو شنيور دقاق" value="${esc(d.q)}" data-in="discQ" autocomplete="off"></div><button class="btn primary" data-act="discGo" ${d.q ? '' : 'disabled'}>${ic('search')} ابحث عند المنافسين</button></div>
+      ${qHits.length ? `<div class="pick-list" role="listbox"><div class="small muted" style="padding:6px 10px">اختر المنتج من متجرنا:</div>${qHits.map(p => `<button data-act="discPick" data-id="${p.id}" role="option">${productImage(p)}<div><div class="p-name">${esc(p.name)}</div><div class="small muted"><span class="mono ltr">${esc(p.model)}</span> · <span class="ltr">${esc(p.brand)}</span> · <span class="mono ltr">${esc(p.sku)}</span></div></div></button>`).join('')}</div>` : d.q && d.picking ? '<div class="small muted" style="margin-top:8px">لا يوجد منتج بهذا الاسم أو الموديل في متجرنا</div>' : ''}
+      ${dp ? `<div class="note info" style="margin-top:14px">${ic('info', 'stroke="currentColor"')}<div><b>منتجنا:</b> ${esc(dp.name)} · الموديل <span class="mono ltr">${esc(dp.model)}</span> · <span class="ltr">${esc(dp.brand)}</span><br><span class="small">المواصفات: ${esc(dp.specs)} · محتويات العبوة: ${esc(dp.pkg)}</span></div></div>` : ''}
+      ${d.loading ? `<div class="empty"><span class="spin"></span><div style="margin-top:8px">جارٍ البحث عند ${cnt(db.competitors.length, 'competitor')}…</div></div>` : ''}
+      ${!d.loading && d.results ? `<div class="small muted" style="margin:14px 0 8px">${cnt(d.results.length, 'result')} محتملة — مرتبة من الأكثر تشابهًا. راجع <b>الموديل ومحتويات العبوة</b> قبل التأكيد. الروابط التي أكدتها من قبل تظهر بعلامة «مؤكد».</div>${d.results.length ? d.results.map(c => {
+        const m = c.existingId ? db.matches.find(x => x.id === c.existingId) : null, st = m ? m.status : null, comp = C(c.compId);
+        const scoreCol = c.score >= 85 ? 'var(--green)' : c.score >= 55 ? 'var(--amber)' : 'var(--red)';
+        const scoreTxt = c.score >= 85 ? 'تشابه عالٍ' : c.score >= 55 ? 'تشابه متوسط' : 'تشابه ضعيف';
+        return `<div class="cand ${st || ''}"><div><div class="c-t">${esc(c.title)}</div><div class="c-m"><b>${esc(comp.name)}</b><span>${egp(c.price)}</span><span>${c.inStock ? 'متوفر' : 'غير متوفر'}</span><a class="ltr" href="${safeUrl(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.url.replace(/^https?:\/\//, ''))}</a></div><div style="margin-top:6px">${signalsHtml(c.signals)}</div></div>
+        <div class="c-a"><span class="small" style="color:${scoreCol}"><b class="score">${c.score}%</b> ${scoreTxt}</span>${st ? matchBadge(st) : ''}
+        ${st === 'approved' || st === 'rejected' ? `<button class="btn sm" data-act="candReview" data-key="${c.key}" data-s="pending">${ic('undo')} تراجع</button>` : `<button class="btn sm ok" data-act="candReview" data-key="${c.key}" data-s="approved">${ic('check')} نفس المنتج</button><button class="btn sm no" data-act="candReview" data-key="${c.key}" data-s="rejected">${ic('x')} منتج مختلف</button>`}</div></div>`;
+      }).join('') : '<div class="empty">لم يتم العثور على نتائج</div>'}
+      <div class="legend-tiny"><span>✓ متطابق</span><span>✗ مختلف</span><span>؟ غير متاح للمقارنة (المنافسون لا يعرضون كود SKU الخاص بنا)</span></div>` : ''}
+      ${!d.loading && !d.results && !dp ? '<div class="empty" style="padding:22px"><b>ابدأ بكتابة اسم منتج أو رقم موديل</b>يقارن النظام: رقم الموديل، والعلامة التجارية، والمواصفات، ومحتويات العبوة</div>' : ''}
+    </div>`;
+  } else {
+    const list = db.matches.filter(m => !cs.compId || m.compId === cs.compId);
+    const nTab = s => list.filter(m => m.status === s).length;
+    const shown = list.filter(m => m.status === cs.tab).sort((a, b) => b.lastChecked - a.lastChecked);
+    const tabs = [['pending', 'بانتظار تأكيدك'], ['approved', 'مؤكدة'], ['rejected', 'مرفوضة']];
+    body = `<div class="card-b" style="border-bottom:1px solid var(--line-2)">
+      <div class="note info">${ic('info', 'stroke="currentColor"')}<div><b>المطلوب منك:</b> افتح كل رابط وتأكد أنه <b>نفس المنتج تمامًا</b> (نفس الموديل ونفس محتويات العبوة). اختر «نفس المنتج» لاستخدام سعره في المقارنة، أو «منتج مختلف» لاستبعاده.</div></div>
+      <div class="toolbar" style="margin-top:12px"><div class="seg" role="tablist">${tabs.map(([k, l]) => `<button class="${cs.tab === k ? 'on' : ''}" data-act="compTab" data-v="${k}">${l} (${nTab(k)})</button>`).join('')}</div><span style="flex:1"></span>
+      <select class="select" style="width:auto" data-ch="compFilter" aria-label="المنافس"><option value="">كل المنافسين</option>${db.competitors.map(c => `<option value="${c.id}" ${cs.compId === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div></div>
+    <div class="tbl-wrap"><table class="tbl compact stick1"><thead><tr><th>منتجنا</th><th>المنافس</th><th>المنتج عند المنافس</th><th class="n">سعره</th><th>متوفر؟</th><th>ما الذي يتطابق؟</th><th>آخر تحديث</th><th>قرارك</th></tr></thead><tbody>
+    ${shown.length ? shown.map(m => { const p = P(m.productId), c = C(m.compId); return `<tr>
+      <td><div class="p-cell">${productImage(p)}<div><div class="p-name clickable" data-act="openP" data-id="${p.id}" data-tab="market">${esc(p.name)}</div><div class="p-sub mono ltr">${esc(p.model)}</div></div></div></td>
+      <td class="nowrap">${esc(c.name)}</td>
+      <td style="min-width:170px;max-width:240px"><div>${esc(m.title)}</div><a class="small" href="${safeUrl(m.url)}" target="_blank" rel="noopener noreferrer">${ic('ext', 'width="12" height="12" stroke="currentColor"')} فتح الرابط (تجريبي)</a>${m.manual ? ' <span class="badge b-gray plain small">أضيف يدويًا</span>' : ''}</td>
+      <td class="n">${m.price ? egp(m.price) : '<span class="badge b-amber plain">السعر غير متاح</span>'}</td>
+      <td>${m.inStock ? '<span class="badge b-green">متوفر</span>' : '<span class="badge b-red">غير متوفر</span>'}</td>
+      <td>${signalsHtml(m.signals)}${m.score ? `<div class="small muted" style="margin-top:3px">نسبة التشابه ${m.score}%</div>` : '<div class="small muted" style="margin-top:3px">راجع الرابط بنفسك</div>'}</td>
+      <td class="nowrap small">${relTime(m.lastChecked)}</td>
+      <td class="nowrap"><div class="decide">${m.status === 'pending' ? `<button class="btn sm ok" data-act="setMatch" data-id="${m.id}" data-s="approved">${ic('check')} نفس المنتج</button><button class="btn sm no" data-act="setMatch" data-id="${m.id}" data-s="rejected">${ic('x')} منتج مختلف</button>` : m.status === 'approved' ? `<button class="btn sm" data-act="setMatch" data-id="${m.id}" data-s="pending">إلغاء التأكيد</button>` : `<button class="btn sm" data-act="setMatch" data-id="${m.id}" data-s="pending">${ic('undo')} إعادة للمراجعة</button>`}</div></td></tr>`; }).join('') : `<tr><td colspan="8"><div class="empty"><b>${cs.tab === 'pending' ? 'لا توجد روابط تنتظر تأكيدك' : cs.tab === 'approved' ? 'لا توجد روابط مؤكدة' : 'لا توجد روابط مرفوضة'}</b>${cs.tab === 'pending' ? 'يمكنك البحث عن روابط جديدة من تبويب «البحث عن منتج عند المنافسين»' : ''}</div></td></tr>`}
+    </tbody></table></div>`;
+  }
+  return head + body + '</div>';
+}
+
+// ===================== D. MARKET ANALYSIS =====================
+function scopeIds(scope) {
+  if (scope === 'selection') return selResolve().map(p => p.id);
+  if (scope === 'all') return db.products.map(p => p.id);
+  return [...db.analyzed];
+}
+function viewAnalysis() {
+  const A = analyses(), f = state.ana;
+  const ids = scopeIds(f.scope);
+  const base = ids.map(id => A.get(id)).filter(Boolean);
+  const list = base.filter(a => (!f.status || a.status === f.status) && (!f.cat || a.product.cat === f.cat) && matchesQ(a.product, f.q));
+  const order = { above: 0, opportunity: 1, competitive: 2, needs: 3 };
+  list.sort(f.sort === 'name' ? (a, b) => a.product.name.localeCompare(b.product.name, 'ar') : f.sort === 'status' ? (a, b) => order[a.status] - order[b.status] : (a, b) => (b.diffPct ?? -999) - (a.diffPct ?? -999));
+  const nStatus = s => base.filter(a => !s || a.status === s).length;
+  const selN = selResolve().length;
+  const adm = isAdmin();
+  return `
+  <div class="card">
+    <div class="card-h"><div><h2>مقارنة أسعارنا بالمنافسين</h2><div class="sub">آخر تحليل ${relTime(db.lastAnalysis)} · اضغط على أي منتج لعرض التفاصيل${adm ? ' والسعر المقترح' : ''}</div></div>
+      <div class="actions">
+        <select class="select" style="width:auto" data-ch="anaScope" aria-label="نطاق التحليل"><option value="analyzed" ${f.scope === 'analyzed' ? 'selected' : ''}>المنتجات التي تم تحليلها (${db.analyzed.size})</option><option value="selection" ${f.scope === 'selection' ? 'selected' : ''} ${selN ? '' : 'disabled'}>الاختيار الحالي (${selN})</option><option value="all" ${f.scope === 'all' ? 'selected' : ''}>كل المنتجات (${db.products.length})</option></select>
+        ${adm ? `<label class="small muted nowrap" for="tm" title="أقل نسبة ربح مقبولة — لا يقترح النظام سعرًا يقل عنها">هامش الربح المستهدف</label><input id="tm" class="input num" type="number" min="1" max="60" step="1" value="${state.settings.targetMargin}" data-ch="margin" style="width:76px"> <span class="small muted">%</span>` : ''}
+        <button class="btn primary" data-act="runAnalysis" ${ids.length ? '' : 'disabled'}>${ic('play')} تحديث التحليل (${cnt(ids.length, 'product')})</button>
+      </div></div>
+    <div class="card-b" style="border-bottom:1px solid var(--line-2)">
+      <div class="chips" id="status-filter" style="margin-bottom:12px">${[['', 'الكل'], ...['above', 'competitive', 'opportunity', 'needs'].map(k => [k, STATUS[k].label])].map(([k, l]) => `<button class="chip filter ${f.status === k ? 'on' : ''}" data-act="anaStatus" data-v="${k}" ${k ? `title="${STATUS[k].desc}"` : ''}>${k ? `<span style="width:8px;height:8px;border-radius:50%;background:${STATUS[k].color}"></span>` : ''}${l} <span class="c-n">${nStatus(k)}</span></button>`).join('')}</div>
+      <div class="toolbar"><div class="search">${ic('search')}<input id="ana-q" class="input" placeholder="ابحث بالاسم أو الموديل أو SKU" value="${esc(f.q)}" data-in="anaQ" autocomplete="off"></div>
+        <select class="select" data-ch="anaCat" aria-label="الفئة"><option value="">كل الفئات</option>${CATEGORIES.map(c => `<option value="${c.id}" ${f.cat === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div>
+    </div>
+    <div class="tbl-wrap"><table class="tbl compact stick1"><thead><tr><th>المنتج</th><th>النتيجة</th><th class="n">سعرنا</th>${adm ? '<th class="n">التكلفة</th>' : ''}<th class="n" title="أرخص وأغلى سعر صالح للمقارنة">أسعار المنافسين</th><th class="n">متوسطهم</th><th class="n" title="الفرق بين سعرنا ومتوسط المنافسين">الفرق</th><th>توفر المنافسين · آخر تحديث</th>${adm ? '<th class="n">السعر المقترح</th>' : ''}</tr></thead><tbody>
+    ${list.length ? list.map(a => { const p = a.product; return `<tr class="clickable" data-act="openP" data-id="${p.id}" data-tab="market">
+      <td><div class="p-cell">${productImage(p)}<div><div class="p-name">${esc(p.name)}</div><div class="p-sub"><span class="mono ltr">${esc(p.model)}</span> · <span class="ltr">${esc(p.brand)}</span>${db.analyzed.has(p.id) ? '' : ' · <span class="badge b-gray plain small">لم يُحلل</span>'}</div></div></div></td>
+      <td>${statusBadge(a.status)}</td>
+      <td class="n"><b>${egp(p.price)}</b></td>${adm ? `<td class="n muted">${egp(p.cost)}</td>` : ''}
+      <td class="n">${a.n ? `<span class="num">${fmt(a.min)} – ${fmt(a.max)}</span>` : '<span class="muted">—</span>'}</td><td class="n">${egp(a.avg)}</td>
+      <td class="n" style="color:${a.diffPct > state.settings.tolerance ? 'var(--red)' : a.diffPct < -state.settings.opportunityGap ? 'var(--blue)' : 'inherit'}">${pct(a.diffPct)}</td>
+      <td class="nowrap small">${a.approvedCount ? `متوفر عند ${a.inStockCount} من ${a.approvedCount}` : '<span class="muted">لا توجد روابط مؤكدة</span>'}<div class="muted">${a.lastChecked ? relTime(a.lastChecked) : '—'}</div></td>
+      ${adm ? `<td class="n">${a.suggested != null ? `<b>${egp(a.suggested)}</b>${a.deltaUnit ? `<div class="small ${a.deltaUnit > 0 ? '' : 'muted'}" style="color:${a.deltaUnit > 0 ? 'var(--green)' : ''}">${a.deltaUnit > 0 ? 'رفع' : 'خفض'} <span class="num">${fmt(Math.abs(a.deltaUnit))}</span></div>` : '<div class="small muted">اترك السعر كما هو</div>'}${a.floorHit ? '<div class="small nowrap" style="color:var(--amber)" title="لا يمكن النزول أكثر دون خسارة هامش الربح المستهدف">عند الحد الآمن</div>' : ''}` : '<span class="muted">—</span>'}</td>` : ''}
+</tr>`; }).join('') : `<tr><td colspan="12"><div class="empty"><b>لا توجد منتجات</b>${f.scope === 'selection' ? 'اختر منتجات من صفحة المنتجات' : 'جرّب تغيير الفلاتر'}</div></td></tr>`}
+    </tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:16px"><div class="card-b small" style="line-height:1.9"><details class="how"><summary>كيف يتم حساب النتائج؟</summary><div class="muted" style="margin-top:8px">
+    <div>• الحساب ثابت وقابل للمراجعة — لا توجد أسعار يولّدها الذكاء الاصطناعي.</div>
+    <div>• نقارن سعرنا بـ<b>متوسط أسعار المنافسين الصالحة للمقارنة</b> فقط. يتم تجاهل: الروابط غير المؤكدة، والمنتجات غير المتوفرة عند المنافس، والأسعار غير المتاحة، والأسعار الأقدم من ${state.settings.staleDays} أيام، والأسعار غير المنطقية مقارنة بالباقي.</div>
+    <div>• <b>أعلى من السوق</b>: سعرنا أغلى من المتوسط بأكثر من ${state.settings.tolerance}% · <b>سعر تنافسي</b>: بين +${state.settings.tolerance}% و −${state.settings.opportunityGap}% · <b>فرصة لزيادة الربح</b>: أرخص من المتوسط بأكثر من ${state.settings.opportunityGap}% · <b>بيانات غير كافية</b>: عدد الأسعار الصالحة أقل من ${state.settings.minObservations}.</div>
+    ${adm ? `<div>• <b>السعر المقترح</b>: المنتج ذو السعر التنافسي يبقى على سعره. غير ذلك = ${100 - state.settings.undercut}% من متوسط المنافسين، ولا يقل عن أرخص منافس، ولا ينزل أبدًا عن <b>الحد الأدنى الآمن = التكلفة ÷ (1 − ${state.settings.targetMargin}%)</b>، ويُقرّب لأقرب 5 ج.م.</div>` : ''}
+    <div>• النظام يقترح فقط ولا يغيّر أي سعر في المتجر.</div></div></details></div></div>`;
+}
+
+// ---------- product detail (modal) ----------
+function productModal(m) {
+  const p = P(m.id), a = Pricing.analyze(p, db.matches, state.settings), adm = isAdmin();
+  const tab = m.tab || 'market';
+  const head = `<div class="detail-head">${productImage(p, 'lg')}<div><h3>${esc(p.name)}</h3><div class="meta-line"><span>SKU <b class="mono ltr">${esc(p.sku)}</b></span><span>الموديل <b class="mono ltr">${esc(p.model)}</b></span><span>العلامة <b class="ltr">${esc(p.brand)}</b></span><span>الفئة <b>${CAT[p.cat].name}</b></span></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">${statusBadge(a.status)} ${stockBadge(p)} ${db.analyzed.has(p.id) ? '' : '<span class="badge b-gray plain">لم يُحلل بعد</span>'}</div></div></div>`;
+  const tabs = `<div class="tabs" style="padding:0;margin-top:14px">${[['market', 'مقارنة الأسعار'], ['info', 'بيانات المنتج']].map(([k, l]) => `<button class="${tab === k ? 'on' : ''}" data-act="pTab" data-v="${k}">${l}</button>`).join('')}</div>`;
+  let body = '';
+  if (tab === 'info') {
+    const inSel = selResolve().some(x => x.id === p.id);
+    body = `<div class="grid g-2e" style="margin-top:16px">
+      <div><dl class="kv"><dt>سعر البيع</dt><dd>${egp(p.price)}</dd>${adm ? `<dt>سعر التكلفة</dt><dd>${egp(p.cost)}</dd><dt>الربح للوحدة</dt><dd>${egp(a.profitNow)}</dd><dt>هامش الربح</dt><dd>${pctPlain(a.marginNow)}</dd>` : ''}<dt>الكمية بالمخزون</dt><dd class="num">${p.qty}</dd><dt>المواصفات</dt><dd style="white-space:normal;font-weight:500">${esc(p.specs)}</dd><dt>محتويات العبوة</dt><dd style="white-space:normal;font-weight:500">${esc(p.pkg)}</dd></dl>
+      ${adm ? '' : `<div class="note lock" style="margin-top:12px">${ic('lock', 'stroke="currentColor"')}<div>التكلفة وهامش الربح متاحان لمدير التسعير فقط.</div></div>`}</div>
+      <div><div class="sec-title" style="margin-top:0">روابط المنافسين لهذا المنتج</div>
+      <div class="list">${db.matches.filter(x => x.productId === p.id).map(x => `<div class="li" style="padding:8px 0"><div><div class="t">${esc(C(x.compId).name)}</div><div class="m">${x.price ? egpTxt(x.price) : 'سعر غير مقروء'} · ${x.inStock ? 'متوفر' : 'غير متوفر'}</div></div><div class="act">${matchBadge(x.status)}</div></div>`).join('') || '<div class="small muted">لا توجد روابط منافسين بعد.</div>'}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sm" data-act="discFor" data-id="${p.id}">${ic('search')} ابحث عنه عند المنافسين</button><button class="btn sm" data-act="addUrl" data-pid="${p.id}">${ic('link')} إضافة رابط</button><button class="btn sm ${inSel ? '' : 'primary'}" data-act="toggleP" data-id="${p.id}">${inSel ? 'إزالة من المنتجات المختارة' : 'إضافة إلى المنتجات المختارة'}</button></div></div></div>`;
+  } else {
+    const rows = a.rows.slice().sort((x, y) => (y.ok - x.ok) || ((x.m.price || 1e9) - (y.m.price || 1e9)));
+    const approved = db.matches.filter(x => x.productId === p.id && x.status === 'approved' && x.history.some(h => h.price));
+    const palette = ['#1D2230', '#0F766E', '#7C3AED', '#BE185D', '#1D4ED8', '#A16207'];
+    const series = approved.map((x, i) => ({ name: C(x.compId).name, color: C(x.compId).color || palette[i % palette.length], points: x.history.filter(h => h.price).map(h => ({ t: h.t, y: h.price, note: h.inStock ? '' : 'غير متوفر' })) }));
+    series.push({ name: 'سعر الخليلي', color: '#F26B1D', width: 3, dashed: true, points: (db.ourHistory[p.id] || []).map(h => ({ t: h.t, y: h.price })) });
+    const warns = a.warnings.filter(w => (adm || !w.sensitive) && w.kind !== 'danger'); // danger messages are already stated in the verdict
+    const wi = m.whatIf !== '' && m.whatIf != null ? Number(m.whatIf) : null;
+    body = `${verdictHtml(a, adm)}<div class="stats" style="margin-top:14px">
+      <div class="stat hl"><div class="s-l">سعر الخليلي</div><div class="s-v">${egp(p.price)}</div><div class="s-f">${a.diffPct != null ? `${pct(a.diffPct)} عن المتوسط` : '—'}</div></div>
+      <div class="stat"><div class="s-l">متوسط المنافسين</div><div class="s-v">${egp(a.avg)}</div><div class="s-f">صالح للمقارنة: ${a.n} من ${a.rows.length}</div></div>
+      <div class="stat"><div class="s-l">أرخص منافس</div><div class="s-v">${egp(a.min)}</div><div class="s-f">من الأسعار الصالحة</div></div>
+      <div class="stat"><div class="s-l">أغلى منافس</div><div class="s-v">${egp(a.max)}</div><div class="s-f">آخر تحديث ${a.lastChecked ? relTime(a.lastChecked) : '—'}</div></div></div>
+      ${warns.length ? `<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">${warns.map(w => `<div class="note ${w.kind}">${ic(w.kind === 'info' ? 'info' : 'alert', 'stroke="currentColor"')}<div>${esc(w.text)}</div></div>`).join('')}</div>` : ''}
+      <div class="sec-title">أسعار المنافسين لنفس المنتج</div>
+      <div class="tbl-wrap" style="border:1px solid var(--line);border-radius:10px"><table class="tbl stick1"><thead><tr><th>المنافس</th><th>المنتج عند المنافس</th><th class="n">سعره</th><th class="n">مقارنة بسعرنا</th><th>متوفر؟</th><th>الرابط</th><th>دخل في الحساب؟</th><th>آخر تحديث</th></tr></thead><tbody>
+      ${rows.length ? rows.map(r => `<tr><td class="nowrap"><b>${esc(C(r.m.compId).name)}</b></td><td style="max-width:240px"><div class="small">${esc(r.m.title)}</div><a class="small ltr" href="${safeUrl(r.m.url)}" target="_blank" rel="noopener noreferrer">${ic('ext', 'width="12" height="12" stroke="currentColor"')} فتح الرابط</a></td>
+        <td class="n">${r.m.price ? egp(r.m.price) : '—'}</td><td class="n">${r.m.price ? pct((r.m.price - p.price) / p.price * 100) : '—'}</td>
+        <td>${r.m.inStock ? '<span class="badge b-green">متوفر</span>' : '<span class="badge b-red">غير متوفر</span>'}</td><td>${matchBadge(r.m.status)}</td>
+        <td>${r.ok ? '<span class="badge b-green plain">✓ نعم</span>' : `<span class="badge b-gray plain" title="${esc(r.reason)}">لا — ${esc(r.reason)}</span>`}</td><td class="nowrap small muted">${relTime(r.m.lastChecked)}</td></tr>`).join('') : '<tr><td colspan="8"><div class="empty"><b>لا توجد روابط منافسين</b>استخدم اكتشاف المنافسين لإضافة روابط</div></td></tr>'}
+      </tbody></table></div>
+      <div class="sec-title">تغيّر الأسعار خلال آخر 8 أسابيع</div>
+      ${Charts.html('hist-' + p.id, { label: 'السجل التاريخي للأسعار', yFormat: v => fmt(v), series, refLine: adm ? a.minSafe : null, refLabel: adm ? `الحد الأدنى الآمن ${fmt(a.minSafe)}` : '' }, 240)}
+      <div class="sec-title">السعر المقترح والربح المتوقع</div>
+      ${adm ? `<div class="reco"><div class="grid g-2e">
+        <div><h4>الوضع الحالي</h4><dl class="kv"><dt>سعر التكلفة</dt><dd>${egp(p.cost)}</dd><dt>الهامش المستهدف</dt><dd>${pctPlain(state.settings.targetMargin, 0)}</dd><dt>الحد الأدنى الآمن <span class="small faint">(أقل سعر يحقق الهامش المستهدف)</span></dt><dd>${egp(a.minSafe)}</dd><dt>ربحنا الحالي في القطعة</dt><dd>${egp(a.profitNow)}</dd><dt>الهامش الحالي</dt><dd style="color:${a.marginNow < state.settings.targetMargin ? 'var(--red)' : ''}">${pctPlain(a.marginNow)}</dd></dl></div>
+        <div><h4>السعر المقترح</h4>${a.suggested != null ? `<div style="font-size:30px;font-weight:800;color:var(--orange-600)" class="num">${fmt(a.suggested)} <span style="font-size:15px">ج.م</span></div><div class="small muted" style="margin-bottom:8px">طريقة الحساب: ${esc(a.basis)}</div><dl class="kv"><dt>الربح المتوقع في القطعة</dt><dd>${egp(a.profitSuggested)}</dd><dt>هامش الربح المتوقع</dt><dd>${pctPlain(a.marginSuggested)}</dd><dt>الفرق عن سعرنا الحالي</dt><dd><span class="ltr num">${a.deltaUnit > 0 ? '+' : ''}${fmt(a.deltaUnit)} ج.م</span></dd></dl>
+          <div style="display:flex;gap:8px;margin-top:10px"><button class="btn sm" data-act="copyPrice" data-v="${a.suggested}">نسخ السعر المقترح</button></div>` : `<div class="note warn">${ic('alert', 'stroke="currentColor"')}<div>لا يمكن اقتراح سعر قبل وجود سعرين على الأقل من منافسين. ابحث عن المنتج عند المنافسين وأكّد الروابط ثم حدّث التحليل.</div></div><div style="margin-top:10px"><button class="btn sm" data-act="discFor" data-id="${p.id}">${ic('search')} ابحث عنه عند المنافسين</button></div>`}</div></div>
+        <div class="whatif"><label class="small" for="wi"><b>جرّب سعرًا:</b></label><input id="wi" class="input num" type="number" min="0" step="5" placeholder="${p.price}" value="${wi ?? ''}" data-in="whatIf">
+        ${wi > 0 ? `<span class="small">الربح ${egp(wi - p.cost)} · الهامش ${pctPlain(Pricing.margin(wi, p.cost))}${a.avg ? ` · ${pct((wi - a.avg) / a.avg * 100)} عن متوسط المنافسين` : ''} ${wi < a.minSafe ? '<span class="badge b-red">أقل من الحد الآمن</span>' : '<span class="badge b-green">آمن</span>'}</span>` : '<span class="small muted">اكتب أي سعر لترى الربح والهامش قبل اتخاذ القرار</span>'}</div>
+        <div class="small muted" style="margin-top:10px">${ic('lock', 'width="13" height="13" stroke="currentColor" style="vertical-align:-2px"')} هذه توصية فقط — النظام لا يغيّر الأسعار في المتجر تلقائيًا.</div></div>`
+      : `<div class="note lock">${ic('lock', 'stroke="currentColor"')}<div>السعر المقترح والتكلفة وهامش الربح متاحة لمدير التسعير فقط. بدّل الصلاحية من أعلى الصفحة لعرضها في هذا العرض التجريبي.</div></div>`}`;
+  }
+  return `<div class="modal wide" role="dialog" aria-modal="true" aria-label="${esc(p.name)}"><div class="modal-h"><h3>تفاصيل المنتج</h3><button class="icon-btn" data-act="closeModal" aria-label="إغلاق">${ic('x', 'width="18" height="18" stroke="currentColor"')}</button></div><div class="modal-b">${head}${tabs}${body}</div></div>`;
+}
+
+// ---------- plain-language verdict shown at the top of a product's analysis ----------
+function verdictHtml(a, adm) {
+  const p = a.product, st = STATUS[a.status];
+  const bg = { above: 'var(--red-50)', competitive: 'var(--green-50)', opportunity: 'var(--blue-50)', needs: 'var(--amber-50)' }[a.status];
+  const icon = { above: 'trendUp', competitive: 'check', opportunity: 'tag', needs: 'alert' }[a.status];
+  const sugg = () => {
+    const s = a.suggested, pr = p.price;
+    if (s === pr) return ' نقترح إبقاء السعر كما هو.';
+    if (s > pr) return a.floorHit ? ` هامش ربحنا الحالي أقل من المستهدف، لذلك نقترح ${egpTxt(s)} حفاظًا على الهامش.${a.cannotCompete ? ' المنافسة بالسعر هنا غير مربحة — الأفضل مراجعة سعر الشراء مع المورد.' : ''}` : ` نقترح رفعه إلى ${egpTxt(s)}، أي ربح إضافي ${egpTxt(s - pr)} في كل قطعة، وسنظل أرخص من متوسط المنافسين.`;
+    return a.cannotCompete ? ` أقل سعر ممكن مع الحفاظ على هامش الربح هو ${egpTxt(s)}، وسيظل أغلى من المنافسين — الأفضل مراجعة سعر الشراء مع المورد.` : ` نقترح تخفيضه إلى ${egpTxt(s)}.`;
+  };
+  let title, text;
+  if (a.status === 'needs') {
+    title = 'لا يمكن الحكم على السعر الآن';
+    text = `عدد الأسعار الصالحة للمقارنة ${a.n} فقط، والمطلوب ${state.settings.minObservations} على الأقل. ابحث عن المنتج عند المنافسين وأكّد الروابط الصحيحة ثم حدّث التحليل.`;
+  } else {
+    const d = isoPct(Math.abs(a.diffPct));
+    if (a.status === 'above') { title = 'سعرنا أغلى من المنافسين'; text = `سعرنا ${egpTxt(p.price)} أعلى من متوسط المنافسين (${egpTxt(a.avg)}) بنسبة ${d}.`; }
+    else if (a.status === 'opportunity') { title = 'فرصة لزيادة الربح'; text = `سعرنا ${egpTxt(p.price)} أرخص من متوسط المنافسين (${egpTxt(a.avg)}) بنسبة ${d}.`; }
+    else { title = 'سعرنا مناسب'; text = `سعرنا ${egpTxt(p.price)} قريب من متوسط المنافسين (${egpTxt(a.avg)})، الفرق ${d} فقط.`; }
+    text += adm ? sugg() : (a.status === 'competitive' ? ' لا يحتاج تغييرًا.' : ' يُنصح بمراجعته مع مدير التسعير.');
+  }
+  return `<div class="verdict" style="background:${bg};border-color:${st.color}33">${ic(icon, `width="22" height="22" stroke="${st.color}" style="flex:none;margin-top:2px"`)}<div><b class="v-t" style="color:${st.color}">${title}</b>${esc(text)}</div></div>`;
+}
+
+// ---------- guide: steps, terms, and how the production system will work ----------
+function guideModal() {
+  const steps = [
+    ['box', 'المنتجات', 'ننقل منتجات المتجر (للقراءة فقط)، ثم تختار المنتجات التي تريد متابعة أسعارها.', 'products'],
+    ['store', 'المنافسون', 'نبحث عن نفس المنتج عند المنافسين، وأنت تؤكد الرابط إذا كان نفس المنتج تمامًا.', 'competitors'],
+    ['chart', 'تحليل السوق', 'نقارن سعرنا بمتوسط أسعار المنافسين ونقترح سعرًا لا ينزل عن هامش الربح المستهدف.', 'analysis'],
+    ['file', 'التقارير', 'ملخصات جاهزة للتصدير إلى Excel ومشاركتها مع الفريق.', 'reports'],
+  ];
+  const gloss = [
+    ['متوسط المنافسين', 'متوسط أسعار نفس المنتج عند المنافسين، باستخدام الأسعار الصالحة للمقارنة فقط.'],
+    ['سعر صالح للمقارنة', 'سعر من رابط مؤكد، والمنتج متوفر عند المنافس، وتم تحديثه خلال آخر 7 أيام.'],
+    ['الحد الأدنى الآمن', 'أقل سعر نبيع به ونحقق هامش الربح المستهدف. النظام لا يقترح أبدًا سعرًا أقل منه.'],
+    ['السعر المقترح', 'سعر قريب من متوسط المنافسين لا يقل عن الحد الأدنى الآمن. هو اقتراح فقط ولا يتغير شيء في المتجر.'],
+  ];
+  const prod = ['مزامنة المنتجات من المتجر (قراءة فقط)', 'حفظها في قاعدة بيانات مستقلة', 'اكتشاف روابط المنافسين', 'مراجعتك وتأكيدك للروابط', 'مراقبة آلية للأسعار في الخلفية', 'التحليل والتوصيات والتقارير'];
+  return `<div class="modal wide" style="max-width:840px" role="dialog" aria-modal="true" aria-label="دليل الاستخدام"><div class="modal-h"><h3>دليل الاستخدام والمصطلحات</h3><button class="icon-btn" data-act="closeModal" aria-label="إغلاق">${ic('x', 'width="18" height="18" stroke="currentColor"')}</button></div>
+  <div class="modal-b">
+    <p style="margin:0 0 14px;font-size:15px">هذا النظام <b>يقارن أسعار منتجاتنا بأسعار المنافسين</b>، ويوضح أين سعرنا أغلى أو أرخص من السوق، ويقترح سعرًا مناسبًا <b>دون خسارة هامش الربح</b>. القرار النهائي دائمًا لك — النظام لا يغيّر أي سعر في المتجر.</p>
+    <div class="sec-title" style="margin-top:0">خطوات العمل بالترتيب</div>
+    <div class="guide-steps">${steps.map(([i, t, d, r], k) => `<div class="g-step" data-act="guideGo" data-v="${r}" role="button" tabindex="0"><span class="flow-n" style="background:var(--orange-50);color:var(--orange-600);border-color:var(--orange-100)">${k + 1}</span><div><div class="flow-t">${t}</div><div class="flow-d">${d}</div></div></div>`).join('')}</div>
+    <div class="sec-title">ماذا تعني نتيجة التحليل؟</div>
+    <div class="guide-steps">${['above', 'competitive', 'opportunity', 'needs'].map(s => `<div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px">${statusBadge(s)}<span class="muted">${STATUS[s].desc}</span></div>`).join('')}</div>
+    <div class="sec-title">مصطلحات مهمة</div>
+    <dl class="gloss">${gloss.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl>
+    <div class="sec-title">كيف سيعمل النظام الفعلي؟</div>
+    <div class="prod-flow">${prod.map((t, k) => `<div class="pf-node"><span>${k + 1}</span>${t}</div>`).join('')}</div>
+    <div class="note warn" style="margin-top:16px">${ic('info', 'stroke="currentColor"')}<div>هذه نسخة عرض تجريبية: كل المنتجات والأسعار والمنافسين بيانات تجريبية. يمكنك تجربة صلاحية «مستخدم محدود» من أعلى الصفحة لترى ما يظهر لموظف لا يحق له رؤية التكلفة والأرباح.</div></div>
+  </div>
+  <div class="modal-f"><button class="btn" data-act="closeModal">إغلاق</button><button class="btn primary" data-act="startTour">${ic('play')} ابدأ الجولة التعريفية</button></div></div>`;
+}
+
+// ===================== E. REPORTS =====================
+function reportDefs() {
+  const A = analyses(), an = [...db.analyzed].map(id => A.get(id)).filter(Boolean), adm = isAdmin();
+  const pc = { h: 'المنتج', v: a => a.product.name, html: a => `<div class="p-cell">${productImage(a.product)}<div><div class="p-name clickable" data-act="openP" data-id="${a.product.id}" data-tab="market">${esc(a.product.name)}</div><div class="p-sub mono ltr">${esc(a.product.model)}</div></div></div>`, w: 40 };
+  const col = (h, v, o = {}) => ({ h, v, ...o });
+  const money = (h, v, o) => col(h, v, { money: true, w: 14, ...o });
+  const base = [pc, col('SKU', a => a.product.sku, { mono: true, w: 16, noScreen: true }), col('العلامة', a => a.product.brand, { w: 10 }), money('سعرنا', a => a.product.price), money('متوسط المنافسين', a => a.avg == null ? null : Math.round(a.avg)), money('أرخص منافس', a => a.min), col('الفرق %', a => a.diffPct == null ? null : +a.diffPct.toFixed(1), { pct: true, w: 10 })];
+  const sens = [money('التكلفة', a => a.product.cost, { sensitive: true }), col('الهامش %', a => +a.marginNow.toFixed(1), { pct0: true, sensitive: true, w: 14 }), money('السعر المقترح', a => a.suggested, { sensitive: true })];
+  const changes = [];
+  db.matches.filter(m => m.status === 'approved').forEach(m => { const h = m.history.filter(x => x.price); for (let i = h.length - 1; i > 0 && Date.now() - h[i].t < 5 * DAY; i--) { if (h[i].price !== h[i - 1].price) { changes.push({ m, p: P(m.productId), c: C(m.compId), from: h[i - 1].price, to: h[i].price, t: h[i].t }); break; } } });
+  changes.sort((a, b) => b.t - a.t);
+  const defs = [
+    { id: 'above', title: STATUS.above.label, desc: 'منتجات سعرها أغلى من متوسط المنافسين — تحتاج مراجعة', rows: an.filter(a => a.status === 'above').sort((a, b) => b.diffPct - a.diffPct), cols: [...base, ...sens] },
+    { id: 'competitive', title: STATUS.competitive.label, desc: 'منتجات سعرها قريب من متوسط المنافسين — لا تحتاج تغييرًا', rows: an.filter(a => a.status === 'competitive').sort((a, b) => b.diffPct - a.diffPct), cols: [...base, ...sens] },
+    { id: 'opportunity', title: STATUS.opportunity.label, desc: 'منتجات سعرها أرخص من المنافسين بوضوح ويمكن رفعه مع البقاء أرخص من متوسطهم', rows: an.filter(a => a.status === 'opportunity').sort((a, b) => b.deltaUnit - a.deltaUnit), cols: [...base, ...sens, money('ربح إضافي للوحدة', a => a.deltaUnit, { sensitive: true })] },
+    { id: 'needs', title: STATUS.needs.label, desc: 'منتجات ليس لها أسعار منافسين كافية للحكم على سعرها', rows: an.filter(a => a.status === 'needs'), cols: [pc, col('SKU', a => a.product.sku, { mono: true, w: 16, noScreen: true }), col('العلامة', a => a.product.brand, { w: 10 }), money('سعرنا', a => a.product.price), col('روابط مؤكدة', a => a.approvedCount, { w: 12 }), col('بانتظار التأكيد', a => a.pendingCount, { w: 12 }), col('أسعار صالحة', a => a.n, { w: 12 }), col('سبب النقص', a => !a.rows.length ? 'لا توجد روابط منافسين' : a.rows.filter(r => !r.ok).map(r => r.reason).filter((v, i, s) => s.indexOf(v) === i).join('، ') || 'عدد المنافسين غير كافٍ', { w: 40 })] },
+    { id: 'changes', title: 'تغيرات أسعار المنافسين', desc: 'آخر تغيير سعر لكل رابط منافس مؤكد خلال آخر 5 أيام', rows: changes, cols: [
+      { h: 'المنتج', v: r => r.p.name, html: r => `<span class="clickable p-name" data-act="openP" data-id="${r.p.id}" data-tab="market">${esc(r.p.name)}</span>`, w: 40 }, { h: 'المنافس', v: r => r.c.name, w: 18 }, money('السعر السابق', r => r.from), money('السعر الجديد', r => r.to),
+      { h: 'التغير %', v: r => +((r.to - r.from) / r.from * 100).toFixed(1), pct: true, w: 10 }, money('سعرنا', r => r.p.price), { h: 'التاريخ', v: r => fmtDate(r.t), w: 12 }] },
+  ];
+  defs.forEach(d => d.cols = d.cols.filter(c => adm || !c.sensitive));
+  return defs;
+}
+function viewReports() {
+  const defs = reportDefs(), cur0 = defs.find(d => d.id === state.rep.tab) || defs[0], cur = { ...cur0, cols: cur0.cols.filter(c => !c.noScreen) };
+  const cell = (c, r) => { if (c.html) return c.html(r); const v = c.v(r); if (v == null || v === '') return '<span class="muted">—</span>'; if (c.money) return egp(v); if (c.pct) return pct(v); if (c.pct0) return pctPlain(v); if (c.mono) return `<span class="mono ltr">${esc(v)}</span>`; return esc(v); };
+  const numCol = c => c.money || c.pct || c.pct0;
+  return `<div class="card">
+    <div class="card-h" id="rep-head"><div><h2>التقارير</h2><div class="sub">مبنية على آخر تحليل (${fmtDateTime(db.lastAnalysis)}) · تم تحليل ${cnt(db.analyzed.size, 'product')}${isAdmin() ? '' : ' · تم إخفاء التكلفة والهوامش لصلاحيتك'}</div></div>
+      <div class="actions"><button class="btn" data-act="export" data-v="current">${ic('down')} تصدير التقرير الحالي</button><button class="btn primary" data-act="export" data-v="all">${ic('down')} تصدير كل التقارير إلى Excel</button></div></div>
+    <div class="tabs" role="tablist">${defs.map(d => `<button role="tab" class="${d.id === cur.id ? 'on' : ''}" data-act="repTab" data-v="${d.id}">${d.title}<span class="tc">${d.rows.length}</span></button>`).join('')}</div>
+    <div class="card-b small muted" style="padding-bottom:0">${cur.desc}</div>
+    <div class="tbl-wrap" style="margin-top:8px"><table class="tbl stick1"><thead><tr>${cur.cols.map(c => `<th class="${numCol(c) ? 'n' : ''}">${c.h}</th>`).join('')}</tr></thead><tbody>
+    ${cur.rows.length ? cur.rows.map(r => `<tr>${cur.cols.map(c => `<td class="${numCol(c) ? 'n' : ''}">${cell(c, r)}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cur.cols.length}"><div class="empty"><b>لا توجد بيانات في هذا التقرير</b></div></td></tr>`}
+    </tbody></table></div></div>`;
+}
+async function exportReports(which) {
+  const defs = reportDefs(), list = which === 'all' ? defs : defs.filter(d => d.id === state.rep.tab);
+  const info = { name: 'معلومات', rows: [['البند', 'القيمة'], ['التقرير', 'Alkhalily Market Intelligence — تقرير السوق'], ['تنبيه', 'بيانات تجريبية (Demo data) — لا تمثل بيانات متجر الخليلي الفعلية'], ['تاريخ الإنشاء', fmtDateTime(Date.now())], ['آخر تحليل', fmtDateTime(db.lastAnalysis)], ['الصلاحية', isAdmin() ? 'مدير التسعير' : 'مستخدم محدود (بدون تكلفة أو هوامش)'], ['المنتجات المحللة', db.analyzed.size], ...(isAdmin() ? [['الهامش المستهدف %', state.settings.targetMargin]] : [])], widths: [24, 70] };
+  const sheets = [info, ...list.map(d => ({ name: d.title, widths: d.cols.map(c => c.w || 14), rows: [d.cols.map(c => c.h + (c.money ? ' (ج.م)' : '')), ...d.rows.map(r => d.cols.map(c => { const v = c.v(r); return typeof v === 'number' ? Math.round(v * 10) / 10 : v; }))] }))];
+  const bytes = Xlsx.build(sheets);
+  const d = new Date(), name = `alkhalily-market-report-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.xlsx`;
+  try { const r = await FileSaver.save(name, bytes); if (r === 'declined') toast('تم إلغاء التنزيل', 'info'); else toast(`تم إنشاء ملف Excel (${cnt(list.length + 1, 'sheet')})`, 'ok'); }
+  catch (e) { toast('تعذّر التنزيل في هذا العرض — افتح الصفحة في المتصفح لتنزيل الملف', 'err'); }
+}
+
+// ===================== MODALS =====================
+function renderModal() {
+  const root = document.getElementById('modal-root'), m = state.modal;
+  if (!m) { root.innerHTML = ''; return; }
+  let html = '';
+  const close = `<button class="icon-btn" data-act="closeModal" aria-label="إغلاق">${ic('x', 'width="18" height="18" stroke="currentColor"')}</button>`;
+  if (m.type === 'product') html = productModal(m);
+  else if (m.type === 'progress') html = `<div class="modal" role="dialog" aria-modal="true"><div class="modal-h"><h3>${m.title}</h3>${m.done ? close : ''}</div><div class="modal-b">
+      <ul class="steps">${m.steps.map((s, i) => `<li class="${i < m.cur || m.done ? 'done' : i === m.cur ? 'run' : ''}"><span class="st">${i < m.cur || m.done ? '✓' : ''}</span>${s}</li>`).join('')}</ul>
+      <div class="progress"><i style="width:${m.done ? 100 : m.cur / m.steps.length * 100}%"></i></div>${m.done ? `<div style="margin-top:16px">${m.result}</div>` : `<div class="small muted" style="margin-top:10px">${m.note || ''}</div>`}</div>
+      ${m.done ? `<div class="modal-f">${m.footer || ''}<button class="btn primary" data-act="closeModal">تم</button></div>` : ''}</div>`;
+  else if (m.type === 'addComp') html = `<form class="modal" data-form="addComp" role="dialog" aria-modal="true"><div class="modal-h"><h3>إضافة منافس</h3>${close}</div><div class="modal-b">
+      <div class="field"><label class="f" for="cn">اسم المتجر</label><input id="cn" class="input" required value="${esc(m.name || '')}" data-in="mf" data-k="name" placeholder="مثال: متجر العدد الحديثة"></div>
+      <div class="field"><label class="f" for="cw">الموقع الإلكتروني</label><input id="cw" class="input ltr" style="display:block;text-align:left" required value="${esc(m.website || '')}" data-in="mf" data-k="website" placeholder="https://example.com"></div>
+      ${m.err ? `<div class="note danger">${ic('alert', 'stroke="currentColor"')}<div>${esc(m.err)}</div></div>` : ''}
+      <div class="small muted">بعد الإضافة يمكنك ربط روابط منتجاته بمنتجات الخليلي أو استخدام اكتشاف المنافسين.</div></div>
+      <div class="modal-f"><button type="button" class="btn" data-act="closeModal">إلغاء</button><button type="submit" class="btn primary">${ic('plus')} إضافة</button></div></form>`;
+  else if (m.type === 'addUrl') {
+    const comp = C(m.compId), host = (() => { try { return new URL(m.url).host; } catch (e) { return null; } })();
+    const wrongHost = comp && host && host !== new URL(comp.website).host;
+    html = `<form class="modal" data-form="addUrl" role="dialog" aria-modal="true"><div class="modal-h"><h3>إضافة رابط منتج منافس</h3>${close}</div><div class="modal-b">
+      <div class="field"><label class="f" for="uc">المنافس</label><select id="uc" class="select" data-ch="mf" data-k="compId">${db.competitors.map(c => `<option value="${c.id}" ${m.compId === c.id ? 'selected' : ''}>${esc(c.name)} — ${esc(c.website.replace(/^https?:\/\//, ''))}</option>`).join('')}</select></div>
+      <div class="field"><label class="f" for="up">منتج الخليلي المرتبط</label><select id="up" class="select" data-ch="mf" data-k="productId"><option value="">اختر المنتج…</option>${BRANDS.map(b => { const ps = db.products.filter(p => p.brand === b); return ps.length ? `<optgroup label="${b}">${ps.map(p => `<option value="${p.id}" ${m.productId === p.id ? 'selected' : ''}>${esc(p.name)} — ${esc(p.model)}</option>`).join('')}</optgroup>` : ''; }).join('')}</select></div>
+      <div class="field"><label class="f" for="uu">رابط المنتج عند المنافس</label><input id="uu" class="input" style="direction:ltr;text-align:left" value="${esc(m.url || '')}" data-in="mf" data-k="url" placeholder="${comp ? esc(comp.website) + '/products/…' : 'https://'}">
+        ${wrongHost ? `<div class="small" style="color:var(--amber);margin-top:4px">تنبيه: الرابط لا يتبع موقع ${esc(comp.name)}</div>` : ''}</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><button type="button" class="btn sm" data-act="previewUrl" ${m.url && m.productId && !m.fetching ? '' : 'disabled'}>${m.fetching ? '<span class="spin"></span>' : ic('eye')} اقرأ السعر من الرابط (محاكاة)</button>${m.previewed ? '<span class="small" style="color:var(--green)">✓ تمت قراءة البيانات — راجعها قبل الحفظ</span>' : ''}</div>
+      <div class="grid g-2e" style="gap:12px"><div class="field"><label class="f" for="upr">السعر عند المنافس (ج.م)</label><input id="upr" class="input num" type="number" min="0" value="${m.price ?? ''}" data-in="mf" data-k="price"></div>
+      <div class="field"><label class="f" for="ust">التوفر</label><select id="ust" class="select" data-ch="mf" data-k="inStock"><option value="1" ${m.inStock !== false ? 'selected' : ''}>متوفر</option><option value="0" ${m.inStock === false ? 'selected' : ''}>غير متوفر</option></select></div></div>
+      ${m.err ? `<div class="note danger">${ic('alert', 'stroke="currentColor"')}<div>${esc(m.err)}</div></div>` : ''}
+      <div class="note info">${ic('info', 'stroke="currentColor"')}<div>سيُحفظ الرابط <b>بانتظار التأكيد</b>، ولن يدخل سعره في المقارنة إلا بعد أن تؤكد أنه نفس المنتج.</div></div></div>
+      <div class="modal-f"><button type="button" class="btn" data-act="closeModal">إلغاء</button><button type="submit" class="btn primary">${ic('link')} حفظ الرابط</button></div></form>`;
+  }
+  else if (m.type === 'saveGroup') html = `<form class="modal" data-form="saveGroup" role="dialog" aria-modal="true"><div class="modal-h"><h3>حفظ مجموعة تحليل</h3>${close}</div><div class="modal-b">
+      <div class="field"><label class="f" for="gn">اسم المجموعة</label><input id="gn" class="input" required value="${esc(m.name || '')}" data-in="mf" data-k="name" placeholder="مثال: صواريخ التجليخ"></div>
+      <div class="note info">${ic('layers', 'stroke="currentColor"')}<div><b>${cnt(selResolve().length, 'product')}</b> · ${esc(selDescribe())}<div class="small">تُحفظ القاعدة نفسها، فتشمل المجموعة المنتجات الجديدة المطابقة بعد كل مزامنة.</div></div></div>
+      ${m.err ? `<div class="note danger" style="margin-top:10px">${ic('alert', 'stroke="currentColor"')}<div>${esc(m.err)}</div></div>` : ''}</div>
+      <div class="modal-f"><button type="button" class="btn" data-act="closeModal">إلغاء</button><button type="submit" class="btn primary">${ic('save')} حفظ</button></div></form>`;
+  else if (m.type === 'guide') html = guideModal();
+  else if (m.type === 'confirm') html = `<div class="modal" role="dialog" aria-modal="true"><div class="modal-h"><h3>${m.title}</h3>${close}</div><div class="modal-b">${m.text}</div><div class="modal-f"><button class="btn" data-act="closeModal">إلغاء</button><button class="btn primary" data-act="confirmYes">${m.yes || 'تأكيد'}</button></div></div>`;
+  root.innerHTML = `<div class="overlay" data-act="overlay">${html}</div>`;
+}
+
+// ===================== RENDER =====================
+function render() {
+  const a = document.activeElement, fid = a && a.id, s0 = a && 'selectionStart' in a ? (() => { try { return [a.selectionStart, a.selectionEnd]; } catch (e) { return null; } })() : null;
+  renderNav(); renderTopbar();
+  const v = { dashboard: viewDashboard, products: viewProducts, competitors: viewCompetitors, analysis: viewAnalysis, reports: viewReports }[state.route];
+  document.getElementById('view').innerHTML = v();
+  renderModal();
+  renderCover();
+  Charts.mountAll();
+  if (fid) { const el = document.getElementById(fid); if (el && el !== document.activeElement) { el.focus({ preventScroll: true }); if (s0 && s0[0] != null) try { el.setSelectionRange(s0[0], s0[1]); } catch (e) { } } }
+}
+function toast(text, kind = 'ok') {
+  const t = document.createElement('div'); t.className = 'toast ' + kind; t.setAttribute('role', 'status'); t.textContent = text;
+  document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 3600);
+}
+function go(route) { const changed = state.route !== route; state.route = route; try { history.replaceState(null, '', '#' + route); } catch (e) { } window.scrollTo(0, 0); render(); if (changed) { const v = document.getElementById('view'); v.classList.remove('enter'); void v.offsetWidth; v.classList.add('enter'); } }
+const openModal = m => { state.modal = m; render(); if (m.type === 'product' || m.type === 'guide') return; const el = document.querySelector('#modal-root input:not([type=checkbox]),#modal-root select'); if (el && !document.querySelector('#modal-root').contains(document.activeElement)) el.focus(); };
+const closeModal = () => { state.modal = null; render(); };
+
+// ---------- long-running simulated actions ----------
+async function doSync() {
+  if (state.modal && state.modal.type === 'progress' && !state.modal.done) return;
+  const m = { type: 'progress', title: 'مزامنة المتجر (محاكاة)', steps: ['الاتصال بـ Alkhalily Store API (قراءة فقط)', 'جلب المنتجات والأسعار والمخزون', 'حفظ البيانات في قاعدة بيانات النظام المستقلة'], cur: 0, note: 'لا يتم تعديل أي بيانات في المتجر.' };
+  openModal(m);
+  for (let i = 0; i < m.steps.length - 1; i++) { await delay(450); m.cur = i + 1; render(); }
+  const r = await api.syncStore();
+  m.done = true;
+  m.result = `<div class="note info">${ic('check', 'stroke="currentColor"')}<div><b>تمت المزامنة بنجاح</b> · ${cnt(r.total, 'product')} في النظام<br>${r.added.length ? `منتجات جديدة: ${r.added.map(p => esc(p.name)).join('، ')}` : 'لا توجد منتجات جديدة'} · تحديثات مخزون: ${r.stockChanged.length}</div></div>`;
+  if (r.added.length) m.footer = `<button class="btn" data-act="goNew">عرض المنتجات الجديدة</button>`;
+  render();
+}
+async function doAnalysis(ids) {
+  if (!ids.length) return toast('لا توجد منتجات للتحليل', 'err');
+  const m = { type: 'progress', title: 'تحديث تحليل السوق (محاكاة)', steps: [`تجميع المنتجات المختارة (${ids.length})`, 'جلب أحدث الأسعار من روابط المنافسين المؤكدة', 'تجاهل الأسعار غير الصالحة للمقارنة', 'حساب السعر المقترح دون النزول عن الحد الأدنى الآمن'], cur: 0, note: 'في النظام الفعلي يتم التحديث في الخلفية عبر n8n وخدمة جمع البيانات.' };
+  openModal(m);
+  const r = await api.runAnalysis(ids, s => { m.cur = s; render(); });
+  const A = analyses(), res = ids.map(id => A.get(id));
+  const c = s => res.filter(a => a.status === s).length;
+  m.done = true;
+  m.result = `<div class="stats">${['competitive', 'above', 'opportunity', 'needs'].map(s => `<div class="stat"><div class="s-l">${STATUS[s].label}</div><div class="s-v" style="color:${STATUS[s].color}">${c(s)}</div></div>`).join('')}</div>
+    <div class="small muted" style="margin-top:12px">تم تحليل ${cnt(r.analyzed, 'product')} · ${cnt(r.changes.length, 'change')} في أسعار المنافسين منذ آخر تحديث${r.changes.length ? ': ' + r.changes.slice(0, 3).map(x => `${esc(P(x.m.productId).name)} (${esc(C(x.m.compId).name)}: ${fmt(x.prev)} ← ${fmt(x.m.price)})`).join('، ') : ''}</div>`;
+  m.footer = state.route !== 'analysis' ? `<button class="btn" data-act="go" data-v="analysis">عرض النتائج</button>` : '';
+  render();
+}
+
+// ===================== EVENTS =====================
+const actions = {
+  go: el => { closeModalSilently(); go(el.dataset.v); },
+  goStatus: el => { closeModalSilently(); state.ana.status = el.dataset.v; state.ana.scope = 'analyzed'; go('analysis'); },
+  role: el => { state.role = el.dataset.v; saveLS('role', state.role); if (!isAdmin() && state.sel.rule) state.sel.rule = null; render(); toast(isAdmin() ? 'عرض مدير التسعير: تظهر التكلفة والهوامش والأسعار المقترحة' : 'عرض المستخدم المحدود: تم إخفاء التكلفة والهوامش', 'info'); },
+  sync: () => doSync(),
+  guide: () => openModal({ type: 'guide' }),
+  startTour: () => { closeCover(); state.modal = null; Tour.start(); },
+  explore: () => { closeCover(); go(state.route); },
+  coverRole: el => { state.role = el.dataset.v; saveLS('role', state.role); if (!isAdmin() && state.sel.rule) state.sel.rule = null; render(); },
+  tourNext: () => Tour.next(), tourPrev: () => Tour.prev(), tourRestart: () => Tour.restart(),
+  tourEnd: el => Tour.end(el.dataset.v === 'home'),
+  goStores: () => { state.comp.section = 'stores'; go('competitors'); },
+  goApproved: () => { state.comp.section = 'review'; state.comp.tab = 'approved'; state.comp.compId = ''; go('competitors'); },
+  goReview: () => { state.comp.section = 'review'; state.comp.tab = 'pending'; go('competitors'); },
+  compSection: el => { state.comp.section = el.dataset.v; render(); },
+  guideGo: el => { saveLS('seenGuide', true); state.modal = null; if (el.dataset.v === 'competitors') state.comp.section = 'review'; go(el.dataset.v); },
+  hideBanner: () => { state.bannerHidden = true; render(); },
+  dismiss: (el, e) => { e.stopPropagation(); state.dismissed.add(el.dataset.key); render(); toast('تم إخفاء التنبيه', 'info'); },
+  restoreAlerts: () => { state.dismissed.clear(); render(); },
+  alert: el => { const a = computeAlerts(analyses()).find(x => x.key === el.dataset.key); if (!a) return; if (a.product) openModal({ type: 'product', id: a.product, tab: 'market', whatIf: '' }); else if (a.go) { state.comp.tab = 'pending'; state.comp.section = 'review'; go(a.go); } else if (a.goStatus) { state.ana.status = a.goStatus; state.ana.scope = 'analyzed'; go('analysis'); } },
+  openP: el => openModal({ type: 'product', id: el.dataset.id, tab: el.dataset.tab || 'market', whatIf: '' }),
+  pTab: el => { state.modal.tab = el.dataset.v; render(); },
+  closeModal: () => { if (state.modal && state.modal.type === 'guide') saveLS('seenGuide', true); closeModal(); },
+  overlay: (el, e) => { if (e.target === el && !(state.modal && state.modal.type === 'progress' && !state.modal.done)) closeModal(); },
+  // selection
+  selAll: () => { const s = state.sel; s.all = !s.all; if (s.all) { s.cats = []; s.brands = []; s.products = []; } render(); },
+  selRule: () => { state.sel.rule = state.sel.rule ? null : 'lowMargin'; render(); },
+  facet: el => { cycleFacet(el.dataset.k, el.dataset.v); render(); },
+  combine: el => { state.sel.combine = el.dataset.v; render(); },
+  toggleP: (el, e) => { e.stopPropagation(); if (toggleProduct(el.dataset.id)) render(); else render(); },
+  selVisible: (el, e) => {
+    e.stopPropagation();
+    const f = state.cat, chosen = new Set(selResolve().map(p => p.id));
+    const rows = db.products.filter(p => (!f.cat || p.cat === f.cat) && (!f.brand || p.brand === f.brand) && (!f.stock || p.stock === f.stock) && (!f.onlySel || chosen.has(p.id)) && matchesQ(p, f.q));
+    const allOn = rows.every(p => chosen.has(p.id));
+    rows.forEach(p => { const on = selResolve().some(x => x.id === p.id); if (allOn ? on : !on) { const s = state.sel; if (on) { pull(s.products, p.id); if (selResolve().some(x => x.id === p.id)) s.exProducts.push(p.id); } else { pull(s.exProducts, p.id); if (!selResolve().some(x => x.id === p.id)) s.products.push(p.id); if (!selResolve().some(x => x.id === p.id)) pull(s.products, p.id); } } });
+    render();
+  },
+  unpick: el => { pull(state.sel.products, el.dataset.id); render(); },
+  unexclude: el => { pull(state.sel.exProducts, el.dataset.id); render(); },
+  selClear: () => { state.sel = emptySel(); render(); toast('تم مسح الاختيار', 'info'); },
+  onlySel: () => { state.cat.onlySel = !state.cat.onlySel; render(); },
+  applyGroup: (el, e) => { if (e.target.closest('.x')) return; const g = state.groups.find(x => x.id === el.dataset.id); state.sel = clone({ ...emptySel(), ...g.sel }); render(); toast(`تم تطبيق المجموعة: ${g.name} (${cnt(selResolve().length, 'product')})`, 'ok'); },
+  delGroup: (el, e) => { e.stopPropagation(); const g = state.groups.find(x => x.id === el.dataset.id); openModal({ type: 'confirm', title: 'حذف المجموعة', text: `هل تريد حذف المجموعة «${esc(g.name)}»؟ لن يتأثر أي منتج.`, yes: 'حذف', onYes: () => { state.groups = state.groups.filter(x => x.id !== g.id); saveLS('groups', state.groups); toast('تم حذف المجموعة', 'info'); } }); },
+  saveGroup: () => openModal({ type: 'saveGroup', name: '' }),
+  analyzeSel: () => { state.ana.scope = 'selection'; state.ana.status = ''; go('analysis'); doAnalysis(scopeIds('selection')); },
+  goNew: () => { state.modal = null; state.cat = { q: '', cat: '', brand: '', stock: '', onlySel: false }; go('products'); },
+  // competitors
+  addComp: () => openModal({ type: 'addComp', name: '', website: '' }),
+  addUrl: el => openModal({ type: 'addUrl', compId: el.dataset.comp || db.competitors[0].id, productId: el.dataset.pid || '', url: '', price: null, inStock: true }),
+  filterComp: el => { state.comp.compId = el.dataset.v; state.comp.tab = 'approved'; state.comp.section = 'review'; render(); },
+  compTab: el => { state.comp.tab = el.dataset.v; render(); },
+  setMatch: async el => { const s = el.dataset.s; await api.setMatchStatus(el.dataset.id, s); render(); toast(s === 'approved' ? 'تم التأكيد — سيدخل سعره في المقارنة' : s === 'rejected' ? 'تم الرفض — لن يدخل في المقارنة' : 'أُعيد الرابط إلى المراجعة', s === 'rejected' ? 'info' : 'ok'); },
+  discPick: el => runDiscovery(el.dataset.id),
+  discGo: () => { const hits = db.products.filter(p => matchesQ(p, state.disc.q)); if (!hits.length) return toast('لا يوجد منتج مطابق في متجرنا', 'err'); runDiscovery(hits[0].id); },
+  discFor: el => { state.modal = null; state.comp.section = 'discover'; go('competitors'); runDiscovery(el.dataset.id); },
+  candReview: async el => { const c = state.disc.results.find(x => x.key === el.dataset.key); const s = el.dataset.s; await api.reviewCandidate(state.disc.productId, c, s); render(); toast(s === 'approved' ? 'تم التأكيد — سيُتابع سعره ويدخل في المقارنة' : s === 'rejected' ? 'تم الرفض — لن يدخل في المقارنة' : 'تم التراجع — الرابط بانتظار التأكيد', s === 'approved' ? 'ok' : 'info'); },
+  previewUrl: async () => { const m = state.modal; m.fetching = true; render(); const r = await api.previewUrl(m.url, m.productId); if (state.modal !== m) return; Object.assign(m, { fetching: false, previewed: true, price: r.price, inStock: r.inStock, title: r.title }); render(); },
+  // analysis
+  anaStatus: el => { state.ana.status = el.dataset.v; render(); },
+  runAnalysis: () => doAnalysis(scopeIds(state.ana.scope)),
+  copyPrice: async el => { try { await navigator.clipboard.writeText(el.dataset.v); toast('تم نسخ السعر المقترح', 'ok'); } catch (e) { toast(`السعر المقترح: ${fmt(+el.dataset.v)} ج.م`, 'info'); } },
+  // reports
+  repTab: el => { state.rep.tab = el.dataset.v; render(); },
+  export: el => exportReports(el.dataset.v),
+  confirmYes: () => { const f = state.modal.onYes; state.modal = null; f && f(); render(); },
+  reset: () => openModal({ type: 'confirm', title: 'إعادة ضبط البيانات التجريبية', text: 'سيتم إعادة تحميل الصفحة واستعادة البيانات التجريبية الأصلية وحذف المجموعات المحفوظة.', yes: 'إعادة الضبط', onYes: () => { ['groups', 'role', 'margin', 'seenGuide', 'seenIntro'].forEach(k => { try { LS && LS.removeItem('alk-mi-' + k); } catch (e) { } }); location.reload(); } }),
+};
+function closeModalSilently() { state.modal = null; }
+function closeCover() { if (state.cover) { state.cover = false; saveLS('seenIntro', true); } }
+async function runDiscovery(pid) {
+  const p = P(pid);
+  Object.assign(state.disc, { productId: pid, q: p.model, picking: false, loading: true, results: null });
+  render();
+  const res = await api.discover(pid);
+  if (state.disc.productId !== pid) return;
+  Object.assign(state.disc, { loading: false, results: res });
+  render();
+}
+const inputs = {
+  catQ: v => state.cat.q = v, anaQ: v => state.ana.q = v,
+  discQ: v => { state.disc.q = v; state.disc.picking = true; },
+  whatIf: v => state.modal.whatIf = v,
+  mf: (v, el) => { const k = el.dataset.k; state.modal[k] = k === 'price' ? (v === '' ? null : Number(v)) : k === 'inStock' ? v === '1' : v; state.modal.err = null; },
+};
+const changes = {
+  catCat: v => state.cat.cat = v, catBrand: v => state.cat.brand = v, catStock: v => state.cat.stock = v,
+  anaCat: v => state.ana.cat = v, anaSort: v => state.ana.sort = v, anaScope: v => state.ana.scope = v,
+  dashCat: v => state.dash.cat = v, compFilter: v => state.comp.compId = v,
+  margin: v => { const n = Math.min(60, Math.max(1, Math.round(Number(v) || 20))); state.settings.targetMargin = n; saveLS('margin', n); toast(`الهامش المستهدف: ${n}% — تمت إعادة الحساب`, 'info'); },
+  mf: inputs.mf,
+};
+const forms = {
+  addComp: async () => {
+    const m = state.modal, name = (m.name || '').trim(), w = (m.website || '').trim();
+    if (!name) { m.err = 'أدخل اسم المتجر'; return render(); }
+    let url; try { url = new URL(/^https?:\/\//i.test(w) ? w : 'https://' + w); } catch (e) { }
+    if (!url || !url.hostname.includes('.')) { m.err = 'أدخل رابط موقع صحيح'; return render(); }
+    if (db.competitors.some(c => new URL(c.website).host === url.host)) { m.err = 'هذا المنافس مضاف بالفعل'; return render(); }
+    const c = await api.addCompetitor({ name, website: url.origin });
+    state.modal = null; render(); toast(`تمت إضافة ${c.name}`, 'ok');
+  },
+  addUrl: async () => {
+    const m = state.modal;
+    if (!m.productId) { m.err = 'اختر منتج الخليلي المرتبط'; return render(); }
+    if (!/^https?:\/\/[^\s/]+\.[^\s]+/i.test(m.url || '')) { m.err = 'أدخل رابطًا صحيحًا يبدأ بـ https://'; return render(); }
+    if (db.matches.some(x => x.url === m.url && x.productId === m.productId)) { m.err = 'هذا الرابط مرتبط بالمنتج بالفعل'; return render(); }
+    await api.addCompetitorUrl({ compId: m.compId, productId: m.productId, url: m.url, price: m.price, inStock: m.inStock, title: m.title });
+    state.modal = null; state.comp.tab = 'pending'; state.comp.section = 'review'; if (state.route !== 'competitors') go('competitors'); else render();
+    toast('تم حفظ الرابط — أكّده من «مراجعة الروابط» ليدخل في المقارنة', 'ok');
+  },
+  saveGroup: () => {
+    const m = state.modal, name = (m.name || '').trim();
+    if (!name) { m.err = 'أدخل اسمًا للمجموعة'; return render(); }
+    if (state.groups.some(g => g.name === name)) { m.err = 'يوجد مجموعة بنفس الاسم'; return render(); }
+    state.groups.push({ id: uid('g'), name, sel: clone(state.sel) }); saveLS('groups', state.groups);
+    state.modal = null; render(); toast(`تم حفظ المجموعة «${name}»`, 'ok');
+  },
+};
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  if (el.tagName === 'A') return;
+  if (el.dataset.act === 'overlay' && e.target !== el) return; // clicks inside a modal body: let forms/inputs behave natively
+  const fn = actions[el.dataset.act]; if (!fn) return;
+  if (el.type !== 'checkbox') e.preventDefault();
+  if (el.disabled) return;
+  fn(el, e);
+});
+document.addEventListener('input', e => { const el = e.target.closest('[data-in]'); if (!el) return; inputs[el.dataset.in]?.(el.value, el); render(); });
+document.addEventListener('change', e => { const el = e.target.closest('[data-ch]'); if (!el) return; changes[el.dataset.ch]?.(el.value, el); render(); });
+document.addEventListener('submit', e => { const f = e.target.closest('[data-form]'); if (!f) return; e.preventDefault(); forms[f.dataset.form]?.(); });
+document.addEventListener('keydown', e => {
+  if (Tour.active) {
+    if (e.key === 'Escape') { e.preventDefault(); Tour.end(); }
+    else if (e.key === 'ArrowLeft' || (e.key === 'Enter' && !e.target.closest('.tour-card button'))) { e.preventDefault(); Tour.next(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); Tour.prev(); }
+    return;
+  }
+  if (e.key === 'Escape' && state.cover) { closeCover(); render(); return; }
+  if (e.key === 'Escape' && state.modal && !(state.modal.type === 'progress' && !state.modal.done)) closeModal();
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role=button][data-act]')) { e.preventDefault(); e.target.click(); }
+});
+window.addEventListener('hashchange', () => { const r = location.hash.slice(1); if (ROUTES.includes(r) && r !== state.route) { state.route = r; render(); } });
+setInterval(() => { if (!state.modal) renderTopbar(); }, 60e3);
+document.getElementById('nojs')?.remove();
+render();
+
+}
+</script>
+</body>
+</html>
